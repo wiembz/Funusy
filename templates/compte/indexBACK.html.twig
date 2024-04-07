@@ -1,0 +1,41 @@
+{% extends 'BACK/base.html.twig' %}
+
+{% block title %}Compte index{% endblock %}
+
+{% block body %}
+    <h1>Compte index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Rib</th>
+                <th>Solde</th>
+                <th>DateOuverture</th>
+                <th>TypeCompte</th>
+                <th>Id_user</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for compte in comptes %}
+            <tr>
+                <td>{{ compte.rib }}</td>
+                <td>{{ compte.solde }}</td>
+                <td>{{ compte.dateOuverture ? compte.dateOuverture|date('Y-m-d') : '' }}</td>
+                <td>{{ compte.typeCompte }}</td>
+                <td>{{ compte.idUser }}</td>
+                <td>
+                    <a href="{{ path('app_compte_show', {'rib': compte.rib}) }}">show</a>
+                    <a href="{{ path('app_compte_edit', {'rib': compte.rib}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_compte_new') }}">Create new</a>
+{% endblock %}

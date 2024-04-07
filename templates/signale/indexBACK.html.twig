@@ -1,0 +1,39 @@
+{% extends 'BACK/base.html.twig' %}
+
+{% block title %}Signale index{% endblock %}
+
+{% block body %}
+    <h1>Signale index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>IdSignal</th>
+                <th>DateSignal</th>
+                <th>Description</th>
+                <th>EtatSignal</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for signale in signales %}
+            <tr>
+                <td>{{ signale.idSignal }}</td>
+                <td>{{ signale.dateSignal ? signale.dateSignal|date('Y-m-d') : '' }}</td>
+                <td>{{ signale.description }}</td>
+                <td>{{ signale.etatSignal ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_signale_show', {'idSignal': signale.idSignal}) }}">show</a>
+                    <a href="{{ path('app_signale_edit', {'idSignal': signale.idSignal}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_signale_new') }}">Create new</a>
+{% endblock %}

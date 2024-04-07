@@ -1,0 +1,43 @@
+{% extends 'BACK/base.html.twig' %}
+
+{% block title %}Credit index{% endblock %}
+
+{% block body %}
+    <h1>Credit index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>IdCredit</th>
+                <th>MontantCredit</th>
+                <th>DureeCredit</th>
+                <th>DateCredit</th>
+                <th>TauxCredit</th>
+                <th>Status</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for credit in credits %}
+            <tr>
+                <td>{{ credit.idCredit }}</td>
+                <td>{{ credit.montantCredit }}</td>
+                <td>{{ credit.dureeCredit }}</td>
+                <td>{{ credit.dateCredit ? credit.dateCredit|date('Y-m-d') : '' }}</td>
+                <td>{{ credit.tauxCredit }}</td>
+                <td>{{ credit.status }}</td>
+                <td>
+                    <a href="{{ path('app_credit_show', {'idCredit': credit.idCredit}) }}">show</a>
+                    <a href="{{ path('app_credit_edit', {'idCredit': credit.idCredit}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_credit_new') }}">Create new</a>
+{% endblock %}

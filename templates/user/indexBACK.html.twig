@@ -1,0 +1,55 @@
+{% extends 'BACK/base.html.twig' %}
+
+{% block title %}User index{% endblock %}
+
+{% block body %}
+    <h1>User index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id_user</th>
+                <th>NomUser</th>
+                <th>PrenomUser</th>
+                <th>EmailUser</th>
+                <th>Mdp</th>
+                <th>Salaire</th>
+                <th>DateNaissance</th>
+                <th>Cin</th>
+                <th>Tel</th>
+                <th>AdresseUser</th>
+                <th>RoleUser</th>
+                <th>NumericCode</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td>{{ user.idUser }}</td>
+                <td>{{ user.nomUser }}</td>
+                <td>{{ user.prenomUser }}</td>
+                <td>{{ user.emailUser }}</td>
+                <td>{{ user.mdp }}</td>
+                <td>{{ user.salaire }}</td>
+                <td>{{ user.dateNaissance ? user.dateNaissance|date('Y-m-d') : '' }}</td>
+                <td>{{ user.cin }}</td>
+                <td>{{ user.tel }}</td>
+                <td>{{ user.adresseUser }}</td>
+                <td>{{ user.roleUser }}</td>
+                <td>{{ user.numericCode }}</td>
+                <td>
+                    <a href="{{ path('app_user_show', {'id_user': user.id_user}) }}">show</a>
+                    <a href="{{ path('backend_user_edit', {'id_user': user.id_user}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="13">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('backend_user_new') }}">Create new</a>
+{% endblock %}
