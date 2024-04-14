@@ -1,4 +1,95 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h3 class="fw-bold">Create a new Credit</h3>
+    </div>
+    <div class="card-body">
+        <form>
+            <div class="mb-3 d-flex flex-column">
+                <label class="form-label" for="basic-icon-default-montant_credit">Amount (DT)</label>
+                <div class="input-group input-group-merge">
+                    <!-- Add icon if needed -->
+                    <input
+                            type="float"
+                            class="form-control"
+                            id="basic-icon-default-montant_credit"
+                            name="{{ field_name(form.montant_credit) }}"
+                            value="{{ field_value(form.montant_credit) }}"
+                            placeholder="{{ field_label(form.montant_credit) }}"
+                            aria-describedby="basic-icon-default-montant_credit2"
+                    />
+                </div>
+                <div class="text-danger mt-2">{{ form_errors(form.montant_credit) }}</div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="basic-icon-default-duree_credit">Duree (month) </label>
+                <div class="input-group input-group-merge">
+                    <input
+                            type="number"
+                            class="form-control"
+                            id="basic-icon-default-duree_credit"
+                            name="{{ field_name(form.duree_credit) }}"
+                            value="{{ field_value(form.duree_credit) }}"
+                            placeholder="{{ field_label(form.duree_credit) }}"
+                            aria-describedby="basic-icon-default-duree_credit2"
+
+                    />
+                </div>
+                <div class="text-danger mt-2">{{ form_errors(form.duree_credit) }}</div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="basic-icon-default-date_credit">Credit Date</label>
+                <div class="input-group input-group-merge">
+                    <input
+                            type="date"
+                            class="form-control"
+                            id="basic-icon-default-date_credit"
+                            name="{{ field_name(form.date_credit) }}"
+                            {% if field_value(form.date_credit) is not null %}
+                                value="{{ field_value(form.date_credit)|date('Y-m-d') }}"
+                            {% endif %}
+                            placeholder="{{ field_label(form.date_credit) }}"
+                            aria-describedby="basic-icon-default-date_credit2"
+                    />
+                </div>
+                <div class="text-danger mt-2">{{ form_errors(form.date_credit) }}</div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="basic-icon-default-taux_credit">Taux</label>
+                <div class="input-group input-group-merge">
+                    <input
+                            type="float"
+                            class="form-control"
+                            id="basic-icon-default-taux_credit"
+                            name="{{ field_name(form.taux_credit) }}"
+                            value="{{ field_value(form.taux_credit) }}"
+                            placeholder="{{ field_label(form.taux_credit) }}"
+                            aria-describedby="basic-icon-default-taux_credit2"
+
+                    />
+                </div>
+                <div class="text-danger mt-2">{{ form_errors(form.taux_credit) }}</div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="basic-icon-default-user">User</label>
+                {{ form_widget(form.user, {'attr': {'class': 'form-control'}}) }}
+                <div class="text-danger mt-2">{{ form_errors(form.user) }}</div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="basic-icon-default-status">Status</label>
+                <div class="input-group input-group-merge">
+                    {{ form_widget(form.status, {'attr': {'class': 'form-select'}}) }}
+                </div>
+                <div class="text-danger mt-2">{{ form_errors(form.status) }}</div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">{{ button_label|default('Send') }}</button>
+            <a href="{{ path('app_credit_index') }}" class="btn btn-secondary">Back to list</a>
+        </form>
+    </div>
+</div>
+
 {{ form_end(form) }}

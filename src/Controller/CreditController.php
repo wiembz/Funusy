@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Credit;
+use App\Entity\User;
 use App\Form\CreditType;
 use App\Repository\CreditRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -35,19 +36,25 @@ class CreditController extends AbstractController
         $credit = new Credit();
         $form = $this->createForm(CreditType::class, $credit);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
+            // Ajouter un message de débogage pour vérifier si le formulaire est valide
+            dump('Formulaire valide');
+
             $entityManager->persist($credit);
             $entityManager->flush();
 
             return $this->redirectToRoute('app_credit_index', [], Response::HTTP_SEE_OTHER);
         }
 
+        // Ajouter un message de débogage pour vérifier si le formulaire est invalide
+        dump('Formulaire invalide');
+
         return $this->renderForm('credit/new.html.twig', [
             'credit' => $credit,
             'form' => $form,
         ]);
     }
+
 
     #[Route('/{idCredit}', name: 'app_credit_show', methods: ['GET'])]
     public function show(Credit $credit): Response

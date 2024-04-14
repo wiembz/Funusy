@@ -64,7 +64,7 @@ class User
 
     public function getId(): ?int
     {
-        return $this->id;
+        return $this->id_user;
     }
 
     public function getNomUser(): ?string
@@ -252,4 +252,5 @@ class User
     {
         return $this->id_user;
     }
+
 }

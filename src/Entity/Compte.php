@@ -27,8 +27,9 @@ class Compte
     #[ORM\Column(name: "type_compte", type: "string", length: 255, nullable: false)]
     private string $typeCompte;
 
+    // Define 'id_user' attribute representing the user ID
     #[ORM\Column(name: "id_user", type: "integer", nullable: true)]
-    private ?int $id_user;
+    private ?int $idUser;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: "id_user", referencedColumnName: "id_user")]
@@ -97,4 +98,5 @@ class Compte
         $this->user = $user;
         return $this;
     }
+    
 }

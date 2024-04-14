@@ -29,10 +29,8 @@ class Credit
     #[ORM\Column(name: "status", type: "string", length: 255, nullable: true, options: ["default" => "Non traité"])]
     private ?string $status = 'Non traité';
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class)
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: "id_user", referencedColumnName: "id_user")]
     private ?User $user;
 
     public function getIdCredit(): ?int
@@ -105,4 +103,19 @@ class Credit
         $this->user = $user;
         return $this;
     }
+    public function __toString()
+{
+    return sprintf(
+        'Credit #%d - Montant: %s, Durée: %d, Date: %s, Taux: %s, Statut: %s, Utilisateur: %s',
+        $this->idCredit,
+        $this->montantCredit,
+        $this->dureeCredit,
+        $this->dateCredit->format('d-m-Y'),
+        $this->tauxCredit,
+        $this->status,
+        $this->user ? $this->user->getNomUser() : 'Aucun utilisateur'
+    );
+}
+
+    
 }
