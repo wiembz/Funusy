@@ -47,7 +47,7 @@ class TransactionController extends AbstractController
         // Set the 'rib' field of the 'transaction' object to the fetched 'compte' object
     
         $transaction->setRib($compte);
-    
+    //
     
         $form = $this->createForm(TransactionType::class, $transaction);
     
