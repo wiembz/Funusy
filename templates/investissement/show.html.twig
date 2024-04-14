@@ -24,19 +24,19 @@
                 <td>{{ investissement.periode }}</td>
             </tr>
             <tr>
-                <th>IdUser</th>
-                <td>{{ investissement.idUser }}</td>
+                <th>User</th>
+                <td>{{ investissement.user.nomUser }}</td>
             </tr>
             <tr>
-                <th>IdProjet</th>
-                <td>{{ investissement.idProjet }}</td>
+                <th>Projet</th>
+                <td>{{ investissement.projet.nomProjet }}</td>
             </tr>
         </tbody>
     </table>
 
-    <a href="{{ path('app_investissement_index') }}">back to list</a>
+    <a href="{{ path('app_investissement_index') }}">Back to list</a>
 
-    <a href="{{ path('app_investissement_edit', {'idInvestissement': investissement.idInvestissement}) }}">edit</a>
+    <a href="{{ path('app_investissement_edit', {'idInvestissement': investissement.idInvestissement}) }}">Edit</a>
 
     {{ include('investissement/_delete_form.html.twig') }}
 {% endblock %}

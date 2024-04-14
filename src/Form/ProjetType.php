@@ -3,8 +3,10 @@
 namespace App\Form;
 
 use App\Entity\Projet;
+use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -24,9 +26,14 @@ class ProjetType extends AbstractType
                     'IMMOBILIER' => 'IMMOBILIER',
                     'TECHNOLOGIQUE' => 'TECHNOLOGIQUE',
                 ],
-            ])            ->add('description')
-            ->add('user')
-        ;   
+            ])
+            ->add('description')
+            ->add('user',  EntityType::class, [
+                'class' => User::class,
+                'choice_label' => 'nom_user', // or any property of User entity to display
+                'placeholder' => 'Select a user', // optional
+            ])
+        ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

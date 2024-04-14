@@ -15,6 +15,7 @@ class HomePageController extends AbstractController
             'controller_name' => 'HomePageController',
         ]);
     }
+    
     #[Route('/testback', name: 'app_testback')]
     public function indexBACK(): Response
     {

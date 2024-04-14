@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -7,7 +6,6 @@ use App\Repository\InvestissementRepository;
 use Doctrine\DBAL\Types\Types;
 
 #[ORM\Entity(repositoryClass: InvestissementRepository::class)]
-
 class Investissement
 {
     #[ORM\Id]
@@ -24,11 +22,13 @@ class Investissement
     #[ORM\Column(name: "periode", type: "integer", nullable: false)]
     private int $periode;
 
-    #[ORM\Column(name: "id_user", type: "integer", nullable: false)]
-    private int $idUser;
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: "id_user", referencedColumnName: "id_user")] // Assuming the column name in User entity is id_user
+    private ?User $user;
 
-    #[ORM\Column(name: "id_projet", type: "integer", nullable: false)]
-    private int $idProjet;
+    #[ORM\ManyToOne(targetEntity: Projet::class)]
+    #[ORM\JoinColumn(name: "id_projet", referencedColumnName: "id_projet")] // Assuming the column name in Projet entity is id_projet
+    private ?Projet $projet;
 
     public function getIdInvestissement(): ?int
     {
@@ -68,25 +68,25 @@ class Investissement
         return $this;
     }
 
-    public function getIdUser(): ?int
+    public function getUser(): ?User
     {
-        return $this->idUser;
+        return $this->user;
     }
 
-    public function setIdUser(int $idUser): static
+    public function setUser(?User $user): static
     {
-        $this->idUser = $idUser;
+        $this->user = $user;
         return $this;
     }
 
-    public function getIdProjet(): ?int
+    public function getProjet(): ?Projet
     {
-        return $this->idProjet;
+        return $this->projet;
     }
 
-    public function setIdProjet(int $idProjet): static
+    public function setProjet(?Projet $projet): static
     {
-        $this->idProjet = $idProjet;
+        $this->projet = $projet;
         return $this;
     }
 }
