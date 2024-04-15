@@ -31,7 +31,7 @@ class ProjetBackController extends AbstractController
         $projet = new Projet();
         $form = $this->createForm(ProjetType::class, $projet);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
             // Check if a project with the same attributes already exists
             $existingProject = $projetRepository->findOneBy([
@@ -43,21 +43,22 @@ class ProjetBackController extends AbstractController
                 'description' => $projet->getDescription(),
                 'user' => $projet->getUser(),
             ]);
-
+    
             if ($existingProject) {
-                $form->get('nomProjet')->addError(new FormError('A project with these attributes already exists.'));
+                $form->addError(new FormError('A project with these attributes already exists.'));
             } else {
                 $entityManager->persist($projet);
                 $entityManager->flush();
                 return $this->redirectToRoute('app_projet_back_index');
             }
         }
-
+    
         return $this->render('projet_back/new.html.twig', [
             'projet' => $projet,
             'form' => $form->createView(),
         ]);
     }
+    
 
     #[Route('/{idProjet}', name: 'app_projet_back_show', methods: ['GET'])]
     public function show(Projet $projet): Response

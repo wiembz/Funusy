@@ -3,43 +3,55 @@
 {% block title %}Projet index{% endblock %}
 
 {% block body %}
-    <h1>Projet index</h1>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>IdProjet</th>
-                <th>NomProjet</th>
-                <th>MontantReq</th>
-                <th>Longitude</th>
-                <th>Latitude</th>
-                <th>TypeProjet</th>
-                <th>Description</th>
-                <th>Actions</th> <!-- Corrected typo: "actions" to "Actions" -->
-            </tr>
-        </thead>
-        <tbody>
-        {% for projet in projets %}
-            <tr>
-                <td>{{ projet.idProjet }}</td>
-                <td>{{ projet.nomProjet }}</td>
-                <td>{{ projet.montantReq }}</td>
-                <td>{{ projet.longitude }}</td>
-                <td>{{ projet.latitude }}</td>
-                <td>{{ projet.typeProjet }}</td>
-                <td>{{ projet.description }}</td>
+    <div class="content-wrapper">
+        <div class="container-xxl flex-grow-1 container-p-y">
+            <div class="card">
+                <h5 class="card-header">Projet index</h5>
+                <div class="table-responsive text-nowrap">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>IdProjet</th>
+                                <th>NomProjet</th>
+                                <th>MontantReq</th>
+                                <th>Longitude</th>
+                                <th>Latitude</th>
+                                <th>TypeProjet</th>
+                                <th>Description</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for projet in projets %}
+                                <tr>
+                                    <td>{{ projet.idProjet }}</td>
+                                    <td>{{ projet.nomProjet }}</td>
+                                    <td>{{ projet.montantReq }}</td>
+                                    <td>{{ projet.longitude }}</td>
+                                    <td>{{ projet.latitude }}</td>
+                                    <td>{{ projet.typeProjet }}</td>
+                                    <td>{{ projet.description }}</td>
                 <td>
-                    <a href="{{ path('app_projet_back_show', {'idProjet': projet.idProjet}) }}">show</a>
-                    <a href="{{ path('app_projet_back_edit', {'idProjet': projet.idProjet}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="8">No records found</td> <!-- Updated message for clarity -->
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <a href="{{ path('app_projet_back_show', {'idProjet': projet.idProjet}) }}" class="btn btn-sm btn-info">Show</a>
+    <a href="{{ path('app_projet_back_edit', {'idProjet': projet.idProjet}) }}" class="btn btn-sm btn-primary">Edit</a>
+    <form action="{{ path('app_projet_back_delete', {'idProjet': projet.idProjet}) }}" method="post" style="display: inline-block;">
+        <input type="hidden" name="_method" value="DELETE">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ projet.idProjet) }}">
+        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+    </form>
+</td>
 
-    <a href="{{ path('app_projet_back_new') }}">Create new</a>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="8">No records found</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <a href="{{ path('app_projet_back_new') }}" class="btn btn-success">Create new</a>
+        </div>
+    </div>
 {% endblock %}

@@ -11,8 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: ProjetRepository::class)]
-#[UniqueEntity(fields: ['nomProjet'], message: 'A project with this name already exists.')]
-
+ 
 class Projet
 {
     #[ORM\Id]
