@@ -1,0 +1,10 @@
+{{ form_start(form) }}
+    {{ form_row(form.nomProjet) }}
+    {{ form_row(form.montantReq) }}
+    {{ form_row(form.longitude) }}
+    {{ form_row(form.latitude) }}
+    {{ form_row(form.typeProjet) }}
+    {{ form_row(form.description) }}
+
+    <button type="submit" class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

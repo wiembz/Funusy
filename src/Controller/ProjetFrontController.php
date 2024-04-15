@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/projet')]
-class ProjetController extends AbstractController
+class ProjetFrontController extends AbstractController
 {
     #[Route('/f', name: 'app_projet', methods: ['GET'])]
     public function indexFRONT(ProjetRepository $projetRepository): Response
