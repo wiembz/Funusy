@@ -7,69 +7,69 @@
     <div class="card-body">
         <form>
             <div class="mb-3 d-flex flex-column">
-                <label class="form-label" for="basic-icon-default-montant_credit">Amount (DT)</label>
+                <label class="form-label" for="basic-icon-default-montantCredit">Amount (DT)</label>
                 <div class="input-group input-group-merge">
                     <!-- Add icon if needed -->
                     <input
                             type="float"
                             class="form-control"
-                            id="basic-icon-default-montant_credit"
-                            name="{{ field_name(form.montant_credit) }}"
-                            value="{{ field_value(form.montant_credit) }}"
-                            placeholder="{{ field_label(form.montant_credit) }}"
-                            aria-describedby="basic-icon-default-montant_credit2"
+                            id="basic-icon-default-montantCredit"
+                            name="{{ field_name(form.montantCredit) }}"
+                            value="{{ field_value(form.montantCredit) }}"
+                            placeholder="{{ field_label(form.montantCredit) }}"
+                            aria-describedby="basic-icon-default-montantCredit2"
                     />
                 </div>
-                <div class="text-danger mt-2">{{ form_errors(form.montant_credit) }}</div>
+                <div class="text-danger mt-2">{{ form_errors(form.montantCredit) }}</div>
             </div>
             <div class="mb-3">
-                <label class="form-label" for="basic-icon-default-duree_credit">Duree (month) </label>
+                <label class="form-label" for="basic-icon-default-dureeCredit">Duree (month) </label>
                 <div class="input-group input-group-merge">
                     <input
                             type="number"
                             class="form-control"
-                            id="basic-icon-default-duree_credit"
-                            name="{{ field_name(form.duree_credit) }}"
-                            value="{{ field_value(form.duree_credit) }}"
-                            placeholder="{{ field_label(form.duree_credit) }}"
-                            aria-describedby="basic-icon-default-duree_credit2"
+                            id="basic-icon-default-dureeCredit"
+                            name="{{ field_name(form.dureeCredit) }}"
+                            value="{{ field_value(form.dureeCredit) }}"
+                            placeholder="{{ field_label(form.dureeCredit) }}"
+                            aria-describedby="basic-icon-default-dureeCredit2"
 
                     />
                 </div>
-                <div class="text-danger mt-2">{{ form_errors(form.duree_credit) }}</div>
+                <div class="text-danger mt-2">{{ form_errors(form.dureeCredit) }}</div>
             </div>
             <div class="mb-3">
-                <label class="form-label" for="basic-icon-default-date_credit">Credit Date</label>
+                <label class="form-label" for="basic-icon-default-dateCredit">Credit Date</label>
                 <div class="input-group input-group-merge">
                     <input
                             type="date"
                             class="form-control"
-                            id="basic-icon-default-date_credit"
-                            name="{{ field_name(form.date_credit) }}"
-                            {% if field_value(form.date_credit) is not null %}
-                                value="{{ field_value(form.date_credit)|date('Y-m-d') }}"
+                            id="basic-icon-default-dateCredit"
+                            name="{{ field_name(form.dateCredit) }}"
+                            {% if field_value(form.dateCredit) is not null %}
+                                value="{{ field_value(form.dateCredit)|date('Y-m-d') }}"
                             {% endif %}
-                            placeholder="{{ field_label(form.date_credit) }}"
-                            aria-describedby="basic-icon-default-date_credit2"
+                            placeholder="{{ field_label(form.dateCredit) }}"
+                            aria-describedby="basic-icon-default-dateCredit2"
                     />
                 </div>
-                <div class="text-danger mt-2">{{ form_errors(form.date_credit) }}</div>
+                <div class="text-danger mt-2">{{ form_errors(form.dateCredit) }}</div>
             </div>
             <div class="mb-3">
-                <label class="form-label" for="basic-icon-default-taux_credit">Taux</label>
+                <label class="form-label" for="basic-icon-default-tauxCredit">Taux</label>
                 <div class="input-group input-group-merge">
                     <input
                             type="float"
                             class="form-control"
-                            id="basic-icon-default-taux_credit"
-                            name="{{ field_name(form.taux_credit) }}"
-                            value="{{ field_value(form.taux_credit) }}"
-                            placeholder="{{ field_label(form.taux_credit) }}"
-                            aria-describedby="basic-icon-default-taux_credit2"
+                            id="basic-icon-default-tauxCredit"
+                            name="{{ field_name(form.tauxCredit) }}"
+                            value="{{ field_value(form.tauxCredit) }}"
+                            placeholder="{{ field_label(form.tauxCredit) }}"
+                            aria-describedby="basic-icon-default-tauxCredit2"
 
                     />
                 </div>
-                <div class="text-danger mt-2">{{ form_errors(form.taux_credit) }}</div>
+                <div class="text-danger mt-2">{{ form_errors(form.tauxCredit) }}</div>
             </div>
 
             <div class="mb-3">

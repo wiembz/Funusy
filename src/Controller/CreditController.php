@@ -30,31 +30,26 @@ class CreditController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_credit_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $credit = new Credit();
-        $form = $this->createForm(CreditType::class, $credit);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            // Ajouter un message de débogage pour vérifier si le formulaire est valide
-            dump('Formulaire valide');
+        #[Route('/new', name: 'app_credit_new', methods: ['GET', 'POST'])]
+        public function new(Request $request, EntityManagerInterface $entityManager): Response
+        {
+            $credit = new Credit();
+            $form = $this->createForm(CreditType::class, $credit);
+            $form->handleRequest($request);
 
-            $entityManager->persist($credit);
-            $entityManager->flush();
 
-            return $this->redirectToRoute('app_credit_index', [], Response::HTTP_SEE_OTHER);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $entityManager->persist($credit);
+                $entityManager->flush();
+
+                return $this->redirectToRoute('app_credit_index', [], Response::HTTP_SEE_OTHER);
+            }
+
+            return $this->renderForm('credit/new.html.twig', [
+                'credit' => $credit,
+                'form' => $form,
+            ]);
         }
-
-        // Ajouter un message de débogage pour vérifier si le formulaire est invalide
-        dump('Formulaire invalide');
-
-        return $this->renderForm('credit/new.html.twig', [
-            'credit' => $credit,
-            'form' => $form,
-        ]);
-    }
-
 
     #[Route('/{idCredit}', name: 'app_credit_show', methods: ['GET'])]
     public function show(Credit $credit): Response
