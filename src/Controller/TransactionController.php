@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Repository\CompteRepository;
 
 #[Route('/transaction')]
 class TransactionController extends AbstractController
@@ -30,25 +31,50 @@ class TransactionController extends AbstractController
     }
 
     #[Route('/new', name: 'app_transaction_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+
+    public function new(Request $request, EntityManagerInterface $entityManager, CompteRepository $compteRepository): Response
+    
     {
+    
         $transaction = new Transaction();
+    
+    
+        // Fetch the Compte entity with the 'rib' field set to 'RIBTEST'
+    
+        $compte = $compteRepository->findOneBy(['rib' => 'RIBTEST']);
+    
+    
+        // Set the 'rib' field of the 'transaction' object to the fetched 'compte' object
+    
+        $transaction->setRib($compte);
+    
+    
         $form = $this->createForm(TransactionType::class, $transaction);
+    
         $form->handleRequest($request);
-
+    
+    
         if ($form->isSubmitted() && $form->isValid()) {
+    
             $entityManager->persist($transaction);
+    
             $entityManager->flush();
-
+    
+    
             return $this->redirectToRoute('app_transaction_index', [], Response::HTTP_SEE_OTHER);
+    
         }
-
+    
+    
         return $this->renderForm('transaction/new.html.twig', [
+    
             'transaction' => $transaction,
+    
             'form' => $form,
+    
         ]);
+    
     }
-
     #[Route('/{idTransaction}', name: 'app_transaction_show', methods: ['GET'])]
     public function show(Transaction $transaction): Response
     {
