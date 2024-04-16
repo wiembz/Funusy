@@ -7,13 +7,12 @@
 
     <table class="table">
         <thead>
-            <tr>
-                <th>IdSignal</th>
-                <th>DateSignal</th>
-                <th>Description</th>
-                <th>EtatSignal</th>
-                <th>actions</th>
-            </tr>
+        <tr>
+            <th>IdSignal</th>
+            <th>DateSignal</th>
+            <th>Description</th>
+            <th>actions</th>
+        </tr>
         </thead>
         <tbody>
         {% for signale in signales %}
@@ -21,7 +20,6 @@
                 <td>{{ signale.idSignal }}</td>
                 <td>{{ signale.dateSignal ? signale.dateSignal|date('Y-m-d') : '' }}</td>
                 <td>{{ signale.description }}</td>
-                <td>{{ signale.etatSignal ? 'Yes' : 'No' }}</td>
                 <td>
                     <a href="{{ path('app_signale_show', {'idSignal': signale.idSignal}) }}">show</a>
                     <a href="{{ path('app_signale_edit', {'idSignal': signale.idSignal}) }}">edit</a>
@@ -29,7 +27,7 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="5">no records found</td>
+                <td colspan="4">no records found</td>
             </tr>
         {% endfor %}
         </tbody>

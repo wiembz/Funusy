@@ -14,7 +14,6 @@ class SignaleType extends AbstractType
         $builder
             ->add('dateSignal')
             ->add('description')
-            ->add('etatSignal')
             ->add('idCommentaire')
         ;
     }

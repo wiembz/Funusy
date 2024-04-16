@@ -21,8 +21,7 @@ class Signale
     #[ORM\Column(name: "description", type: "string", length: 255, nullable: false)]
     private string $description;
 
-    #[ORM\Column(name: "etat_signal", type: "boolean", nullable: false)]
-    private bool $etatSignal;
+
 
     #[ORM\ManyToOne(targetEntity: Commentaire::class)]
     #[ORM\JoinColumn(name: "id_commentaire", referencedColumnName: "id_commentaire")]
@@ -55,10 +54,7 @@ class Signale
         return $this;
     }
 
-    public function isEtatSignal(): ?bool
-    {
-        return $this->etatSignal;
-    }
+
 
     public function setEtatSignal(bool $etatSignal): static
     {

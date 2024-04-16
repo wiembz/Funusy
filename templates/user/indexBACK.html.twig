@@ -40,7 +40,7 @@
                 <td>{{ user.numericCode }}</td>
                 <td>
                     <a href="{{ path('app_user_show', {'id_user': user.id_user}) }}">show</a>
-                    <a href="{{ path('backend_user_edit', {'id_user': user.id_user}) }}">edit</a>
+                    <a href="{{ path('app_user_edit', {'id_user': user.id_user}) }}">edit</a>
                 </td>
             </tr>
         {% else %}
@@ -51,5 +51,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('backend_user_new') }}">Create new</a>
+    <a href="{{ path('app_user_new') }}">Create new</a>
 {% endblock %}
