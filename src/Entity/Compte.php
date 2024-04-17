@@ -36,8 +36,15 @@ class Compte
 
 
 
-    // Getters and setters for each attribute
+    
+    public function __toString(): string
 
+    {
+
+        return $this->rib; // Assuming that there's a string property in Compte entity which holds account number.
+
+    }
+// Getters and setters for each attribute
     public function getRib(): ?string
     {
         return $this->rib;

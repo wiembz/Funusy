@@ -56,7 +56,7 @@ class TransactionController extends AbstractController
             'transaction' => $transaction,
         ]);
     }
-
+/*
     #[Route('/{idTransaction}/edit', name: 'app_transaction_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Transaction $transaction, EntityManagerInterface $entityManager): Response
     {
@@ -74,7 +74,7 @@ class TransactionController extends AbstractController
             'form' => $form,
         ]);
     }
-
+*/
     #[Route('/{idTransaction}', name: 'app_transaction_delete', methods: ['POST'])]
     public function delete(Request $request, Transaction $transaction, EntityManagerInterface $entityManager): Response
     {

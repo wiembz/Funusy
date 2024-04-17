@@ -84,6 +84,7 @@ class Transaction
     public function getRib(): ?Compte
     {
         return $this->rib;
+        
     }
 
     public function setRib(?Compte $rib): static
