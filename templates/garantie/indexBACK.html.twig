@@ -7,14 +7,14 @@
 
     <table class="table">
         <thead>
-            <tr>
-                <th>IdGarantie</th>
-                <th>IdCredit</th>
-                <th>NatureGarantie</th>
-                <th>ValeurGarantie</th>
-                <th>Preuve</th>
-                <th>actions</th>
-            </tr>
+        <tr>
+            <th>IdGarantie</th>
+            <th>IdCredit</th>
+            <th>NatureGarantie</th>
+            <th>ValeurGarantie</th>
+            <th>Preuve</th>
+            <th>Actions</th>
+        </tr>
         </thead>
         <tbody>
         {% for garantie in garanties %}
@@ -23,15 +23,22 @@
                 <td>{{ garantie.idCredit }}</td>
                 <td>{{ garantie.natureGarantie }}</td>
                 <td>{{ garantie.valeurGarantie }}</td>
-                <td>{{ garantie.preuve }}</td>
                 <td>
-                    <a href="{{ path('app_garantie_show', {'idGarantie': garantie.idGarantie}) }}">show</a>
-                    <a href="{{ path('app_garantie_edit', {'idGarantie': garantie.idGarantie}) }}">edit</a>
+                    {% if garantie.preuve %}
+                        <a href="{{ asset('uploads/preuve/' ~ garantie.preuve) }}" target="_blank">{{ garantie.preuve }}</a>
+                    {% else %}
+                        No proof provided
+                    {% endif %}
+                </td>
+
+                <td>
+                    <a href="{{ path('app_garantie_show', {'idGarantie': garantie.idGarantie}) }}">Show</a>
+                    <a href="{{ path('app_garantie_edit', {'idGarantie': garantie.idGarantie}) }}">Edit</a>
                 </td>
             </tr>
         {% else %}
             <tr>
-                <td colspan="6">no records found</td>
+                <td colspan="6">No records found</td>
             </tr>
         {% endfor %}
         </tbody>

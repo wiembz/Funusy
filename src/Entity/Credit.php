@@ -120,23 +120,23 @@ class Credit
         return $this;
     }
     public function __toString()
-{
-    return sprintf(
-        'Credit #%d - Montant: %s, Durée: %d, Date: %s, Taux: %s, Statut: %s, Utilisateur: %s',
-        $this->idCredit,
-        $this->montantCredit,
-        $this->dureeCredit,
-        $this->dateCredit->format('d-m-Y'),
-        $this->tauxCredit,
-        $this->status,
-        $this->user ? $this->user->getNomUser() : 'Aucun utilisateur'
-    );
-}
+    {
+        return sprintf(
+            'Credit #%d - Montant: %s, Durée: %d, Date: %s, Taux: %s, Statut: %s, Utilisateur: %s',
+            $this->idCredit,
+            $this->montantCredit,
+            $this->dureeCredit,
+            $this->dateCredit->format('d-m-Y'),
+            $this->tauxCredit,
+            $this->status,
+            $this->user ? $this->user->getNomUser() : 'Aucun utilisateur'
+        );
+    }
 
     public function __construct()
     {
         $this->dateCredit = new DateTime(); // Initialise dateCredit avec la date locale actuelle
     }
 
-    
+
 }

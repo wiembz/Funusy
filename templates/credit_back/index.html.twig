@@ -1,31 +1,41 @@
-<!DOCTYPE html>
+{% extends 'baseF.html.twig' %}
 
-<title>Credit index</title>
+{% block title %}Credit index{% endblock %}
 
 {% block body %}
+    <br>
+    <br>
+    <br>
+
     <h1>Credit index</h1>
 
     <table class="table">
         <thead>
-            <tr>
-                <th>IdCredit</th>
-                <th>MontantCredit</th>
-                <th>DureeCredit</th>
-                <th>DateCredit</th>
-                <th>TauxCredit</th>
-                <th>Status</th>
-                <th>actions</th>
-            </tr>
+        <tr>
+            <th>IdCredit</th>
+            <th>MontantCredit</th>
+            <th>DureeCredit</th>
+            <th>DateCredit</th>
+            <th>TauxCredit</th>
+            <th>Status</th>
+            <th>User</th>
+            <th>actions</th>
+
+        </tr>
         </thead>
         <tbody>
         {% for credit in credits %}
             <tr>
-                <td>{{ credit.idCredit }}</td>
-                <td>{{ credit.montantCredit }}</td>
-                <td>{{ credit.dureeCredit }}</td>
-                <td>{{ credit.dateCredit ? credit.dateCredit|date('Y-m-d') : '' }}</td>
-                <td>{{ credit.tauxCredit }}</td>
-                <td>{{ credit.status }}</td>
+                <td>{{ credit.getIdCredit() }}</td>
+                <td>{{ credit.getMontantCredit() }}</td>
+                <td>{{ credit.getDureeCredit() }}</td>
+                <td>{{ credit.getDateCredit() ? credit.getDateCredit()|date('Y-m-d') : '' }}</td>
+                <td>{{ credit.getTauxCredit() }}</td>
+                <td>{{ credit.getStatus() }}</td>
+                <td>{{ credit.getUser() ? credit.getUser().getNomUser() : 'Utilisateur inconnu' }}</td>
+
+
+
                 <td>
                     <a href="{{ path('app_credit_back_show', {'idCredit': credit.idCredit}) }}">show</a>
                     <a href="{{ path('app_credit_back_edit', {'idCredit': credit.idCredit}) }}">edit</a>

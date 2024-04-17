@@ -20,7 +20,7 @@ class CreditController extends AbstractController
     #[Route('/f', name: 'app_credit', methods: ['GET'])]
     public function indexFRONT(CreditRepository $creditRepository): Response
     {
-        return $this->render('credit/indexFRONT.html.twig', [
+        return $this->render('credit_back/index.html.twig', [
             'credits' => $creditRepository->findAll(),
         ]);
     }
@@ -66,6 +66,7 @@ class CreditController extends AbstractController
                 'form' => $form,
             ]);
         }
+
 
     #[Route('/{idCredit}', name: 'app_credit_show', methods: ['GET'])]
     public function show(Credit $credit): Response

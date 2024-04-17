@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/credit/back')]
 class CreditFrontController extends AbstractController
 {
-    #[Route('/', name: 'app_credit_back_index', methods: ['GET'])]
+    #[Route('/f', name: 'app_credit_back_index', methods: ['GET'])]
     public function index(CreditRepository $creditRepository): Response
     {
         return $this->render('credit_back/index.html.twig', [
@@ -22,7 +22,7 @@ class CreditFrontController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_credit_back_new', methods: ['GET', 'POST'])]
+    #[Route('/new/f', name: 'app_credit_back_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $credit = new Credit();
@@ -42,7 +42,7 @@ class CreditFrontController extends AbstractController
         ]);
     }
 
-    #[Route('/{idCredit}', name: 'app_credit_back_show', methods: ['GET'])]
+    #[Route('/{idCredit}/f', name: 'app_credit_back_show', methods: ['GET'])]
     public function show(Credit $credit): Response
     {
         return $this->render('credit_back/show.html.twig', [
@@ -50,7 +50,7 @@ class CreditFrontController extends AbstractController
         ]);
     }
 
-    #[Route('/{idCredit}/edit', name: 'app_credit_back_edit', methods: ['GET', 'POST'])]
+    #[Route('/{idCredit}/edit/f', name: 'app_credit_back_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Credit $credit, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(CreditType::class, $credit);
@@ -68,7 +68,7 @@ class CreditFrontController extends AbstractController
         ]);
     }
 
-    #[Route('/{idCredit}', name: 'app_credit_back_delete', methods: ['POST'])]
+    #[Route('/{idCredit}/f  ', name: 'app_credit_back_delete', methods: ['POST'])]
     public function delete(Request $request, Credit $credit, EntityManagerInterface $entityManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$credit->getIdCredit(), $request->request->get('_token'))) {

@@ -10,6 +10,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 
 #[Route('/garantie')]
 class GarantieController extends AbstractController
@@ -34,9 +36,28 @@ class GarantieController extends AbstractController
     {
         $garantie = new Garantie();
         $form = $this->createForm(GarantieType::class, $garantie);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Handle file upload
+            /** @var UploadedFile $file */
+            $file = $form->get('preuve')->getData();
+
+            if ($file) {
+                $fileName = md5(uniqid()).'.'.$file->guessExtension();
+
+                // Move the file to the directory where your files are stored
+                $file->move(
+                    $this->getParameter('preuve_directory'),
+                    $fileName
+                );
+
+                // Update the 'preuve' property to store the file name instead of the file itself
+                $garantie->setPreuve($fileName);
+                // Set the 'preuveOriginalFilename' property to store the original filename
+                $garantie->setPreuve($file->getClientOriginalName());
+            }
 
             $entityManager->persist($garantie);
             $entityManager->flush();

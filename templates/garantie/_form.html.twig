@@ -10,7 +10,6 @@
             <div class="mb-3 d-flex flex-column">
                 <label class="form-label" for="basic-icon-default-idCredit">Id Credit</label>
                 <div class="input-group input-group-merge">
-                    <!-- Add icon if needed -->
                     <input
                             type="number"
                             class="form-control"
@@ -42,7 +41,6 @@
                             value="{{ field_value(form.valeurGarantie) }}"
                             placeholder="{{ field_label(form.valeurGarantie) }}"
                             aria-describedby="basic-icon-default-valeurGarantie2"
-
                     />
                 </div>
                 <div class="text-danger mt-2">{{ form_errors(form.valeurGarantie) }}</div>
@@ -61,6 +59,4 @@
     </div>
 </div>
 
-{{ form_end(form) }}{{ form_start(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
