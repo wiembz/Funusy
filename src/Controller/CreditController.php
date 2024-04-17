@@ -11,6 +11,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/credit')]
 class CreditController extends AbstractController
@@ -31,7 +33,7 @@ class CreditController extends AbstractController
     }
 
         #[Route('/new', name: 'app_credit_new', methods: ['GET', 'POST'])]
-        public function new(Request $request, EntityManagerInterface $entityManager): Response
+        public function new(Request $request, EntityManagerInterface $entityManager,CreditRepository $creditRepository, ValidatorInterface $validator): Response
         {
             $credit = new Credit();
             $form = $this->createForm(CreditType::class, $credit);
@@ -39,10 +41,24 @@ class CreditController extends AbstractController
 
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $entityManager->persist($credit);
-                $entityManager->flush();
+                // Check if a project with the same attributes already exists
+                $existingCredit = $creditRepository->findOneBy([
+                    'montantCredit' => $credit->getMontantCredit(),
+                    'dureeCredit' => $credit->getDureeCredit(),
+                    'dateCredit' => $credit->getDateCredit(),
+                    'tauxCredit' => $credit->getTauxCredit(),
+                    'status' => $credit->getStatus(),
+                    'user' => $credit->getUser(),
+                ]);
 
-                return $this->redirectToRoute('app_credit_index', [], Response::HTTP_SEE_OTHER);
+                if ($existingCredit) {
+                    $form->addError(new FormError('A Credit with these attributes already exists.'));
+                } else {
+                    $entityManager->persist($credit);
+                    $entityManager->flush();
+
+                    return $this->redirectToRoute('app_credit_index', [], Response::HTTP_SEE_OTHER);
+                }
             }
 
             return $this->renderForm('credit/new.html.twig', [
