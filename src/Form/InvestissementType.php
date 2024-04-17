@@ -1,11 +1,17 @@
 <?php
-
 namespace App\Form;
 
 use App\Entity\Investissement;
+use App\Entity\User;
+use App\Entity\Projet;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType; // Use IntegerType for periode
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual; // Corrected constraint class
 
 class InvestissementType extends AbstractType
 {
@@ -13,11 +19,33 @@ class InvestissementType extends AbstractType
     {
         $builder
             ->add('montant')
-            ->add('dateInv')
-            ->add('periode')
-            ->add('idUser')
-            ->add('idProjet')
-        ;
+            ->add('dateInv', DateType::class, [
+                'constraints' => [
+                    new NotBlank(),
+                    new GreaterThanOrEqual(['value' => new \DateTime('+1 day')]),
+                ],
+                'label' => 'Investment Date',
+                'widget' => 'single_text',
+            ])
+            ->add('periode', IntegerType::class, [ // Use IntegerType for periode
+                'label' => 'Period (in months)',
+                'required' => false, // Set periode field as optional
+                'attr' => ['min' => 3, 'max' => 60], // Define minimum and maximum values
+            ])
+            ->add('user', EntityType::class, [
+                'class' => User::class,
+                'required' => false,
+                'choice_label' => 'nomUser',
+                'placeholder' => 'Select a user',
+                'label' => 'User',
+            ])
+            ->add('projet', EntityType::class, [
+                'class' => Projet::class,
+                'choice_label' => 'nomProjet',
+                'required' => false,
+                'placeholder' => 'Select a project',
+                'label' => 'Project',
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -3,6 +3,8 @@
 {% block title %}Investissement{% endblock %}
 
 {% block body %}
+    <div class="content-wrapper">
+        <div class="container-xxl flex-grow-1 container-p-y">
     <h1>Investissement</h1>
 
     <table class="table">
@@ -34,9 +36,9 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_investissement_index') }}">Back to list</a>
+    <a href="{{ path('app_investissement_index') }}" class="btn btn-secondary">Back to list</a>
 
-    <a href="{{ path('app_investissement_edit', {'idInvestissement': investissement.idInvestissement}) }}">Edit</a>
-
+    <a href="{{ path('app_investissement_edit', {'idInvestissement': investissement.idInvestissement}) }}" class="btn btn-primary">Edit</a>
+         <br>
     {{ include('investissement/_delete_form.html.twig') }}
 {% endblock %}

@@ -3,15 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\Investissement;
-use App\Form\Investissement1Type;
+use App\Form\InvestissementType;
 use App\Repository\InvestissementRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Form\FormError;
-
 #[Route('/investissement')]
 class InvestissementController extends AbstractController
 {
@@ -32,36 +32,37 @@ class InvestissementController extends AbstractController
     }
 
     #[Route('/new', name: 'app_investissement_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager, InvestissementRepository $investissementRepository): Response
+    public function new(Request $request, EntityManagerInterface $entityManager, investissementRepository $investissementRepository, ValidatorInterface $validator): Response
     {
         $investissement = new Investissement();
-        $form = $this->createForm(Investissement1Type::class, $investissement);
+        $form = $this->createForm(InvestissementType::class, $investissement);
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
-            // Check if the investment already exists
+            // Check if an investment with the same attributes already exists
             $existingInvestissement = $investissementRepository->findOneBy([
                 'montant' => $investissement->getMontant(),
                 'dateInv' => $investissement->getDateInv(),
-                // Add more properties if needed
+                'periode' => $investissement->getPeriode(),
+                'user' => $investissement->getUser(),
+                'projet' => $investissement->getProjet(),
             ]);
-
+            
             if ($existingInvestissement) {
-                $form->addError(new FormError('This investment already exists.'));
+                $form->addError(new FormError('An investment with these attributes already exists.'));
             } else {
                 $entityManager->persist($investissement);
                 $entityManager->flush();
-
                 return $this->redirectToRoute('app_investissement_index');
             }
         }
-
+    
         return $this->render('investissement/new.html.twig', [
+            'investissement' => $investissement,
             'form' => $form->createView(),
         ]);
     }
-
-
+    
 
     #[Route('/{idInvestissement}', name: 'app_investissement_show', methods: ['GET'])]
     public function show(Investissement $investissement): Response
@@ -74,7 +75,7 @@ class InvestissementController extends AbstractController
     #[Route('/{idInvestissement}/edit', name: 'app_investissement_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Investissement $investissement, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(Investissement1Type::class, $investissement);
+        $form = $this->createForm(InvestissementType::class, $investissement);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -92,7 +93,7 @@ class InvestissementController extends AbstractController
     #[Route('/{idInvestissement}', name: 'app_investissement_delete', methods: ['POST'])]
     public function delete(Request $request, Investissement $investissement, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$investissement->getIdInvestissement(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $investissement->getIdInvestissement(), $request->request->get('_token'))) {
             $entityManager->remove($investissement);
             $entityManager->flush();
         }
