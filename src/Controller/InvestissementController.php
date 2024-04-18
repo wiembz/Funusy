@@ -6,6 +6,8 @@ use App\Entity\Investissement;
 use App\Form\InvestissementType;
 use App\Repository\InvestissementRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Projet;
+use App\Repository\ProjetRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,15 +17,19 @@ use Symfony\Component\Form\FormError;
 #[Route('/investissement')]
 class InvestissementController extends AbstractController
 {
-    #[Route('/f', name: 'app_investissement', methods: ['GET'])]
-    public function indexFRONT(InvestissementRepository $investissementRepository): Response
+    #[Route('/', name: 'app_investissement_front_index', methods: ['GET'])]
+    public function indexfont(InvestissementRepository $investissementRepository, ProjetRepository $projetRepository): Response
     {
-        return $this->render('investissement/indexFRONT.html.twig', [
-            'investissements' => $investissementRepository->findAll(),
+        $investissements = $investissementRepository->findAll();
+        $projets = $projetRepository->findAll(); // Fetch all projects
+    
+        return $this->render('investissement_front/index.html.twig', [
+            'investissements' => $investissements,
+            'projets' => $projets, // Pass the list of projects to the template
         ]);
     }
-
-    #[Route('/', name: 'app_investissement_index', methods: ['GET'])]
+    
+    #[Route('/back', name: 'app_investissement_index', methods: ['GET'])]
     public function indexBACK(InvestissementRepository $investissementRepository): Response
     {
         return $this->render('investissement/indexBACK.html.twig', [

@@ -9,10 +9,10 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="above-heading">PROJECTS</div>
-                <h2 class="h2-heading">Projects Options Table</h2>
-                            <div class="button-wrapper">
+                <h2 class="h2-heading">Projects To Invest In</h2>
+                            {# <div class="button-wrapper">
                 <a class="btn-solid-reg page-scroll" href="{{ path('app_projet') }}">Project List</a>
-            </div>
+            </div> #}
             </div>
         </div>
                         <br>
@@ -34,7 +34,7 @@
                             <!-- Add more project attributes as needed -->
                         </ul>
                         <div class="button-wrapper">
-                            <a class="btn-solid-reg page-scroll" href="{{ path('app_investissement') }}">INVEST NOW</a>
+                    <a href="{{ path('app_investissement_front_new', {'projetId': projet.idProjet}) }}" class="btn btn-primary">Invest Now</a>
                         </div>
                     </div>
                 </div>

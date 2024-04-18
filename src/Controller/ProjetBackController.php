@@ -16,15 +16,15 @@ use Symfony\Component\Form\FormError; // Include the FormError class
 #[Route('/projet/back')]
 class ProjetBackController extends AbstractController
 {
-    #[Route('/', name: 'app_projet_back_index', methods: ['GET'])]  
-    public function index(ProjetRepository $projetRepository): Response
-    {
-        $projets = $projetRepository->findAll();
-
-        return $this->render('projet_back/index.html.twig', [
-            'projets' => $projets,
-        ]);
-    }
+        #[Route('/', name: 'app_projet_back_index', methods: ['GET'])]  
+        public function index(ProjetRepository $projetRepository): Response
+        {
+            $projets = $projetRepository->findAll();
+ 
+            return $this->render('projet_back/index.html.twig', [
+                'projets' => $projets,
+            ]);
+        }
     #[Route('/new', name: 'app_projet_back_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, ProjetRepository $projetRepository, ValidatorInterface $validator): Response
     {

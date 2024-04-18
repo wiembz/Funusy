@@ -10,6 +10,8 @@ use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\User;
+use App\Entity\Projet;
 
 #[ORM\Entity(repositoryClass: InvestissementRepository::class)]
 class Investissement

@@ -1,0 +1,53 @@
+{% extends 'baseF.html.twig' %}
+
+{% block title %}Investissements{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col">
+            <h1 class="fw-bold">List of Investments</h1>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Amount</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Period</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for investissement in investissements %}
+                        <tr>
+                            <td>{{ investissement.idInvestissement }}</td>
+                            <td>{{ investissement.montant }}</td>
+                            <td>{{ investissement.dateInv ? investissement.dateInv|date('Y-m-d') : '' }}</td>
+                            <td>{{ investissement.periode }}</td>
+                            <td>
+                                <a href="{{ path('app_investissement_front_show', {'idInvestissement': investissement.idInvestissement}) }}" class="btn btn-outline-primary btn-sm">Show</a>
+                                <a href="{{ path('app_investissement_front_edit', {'idInvestissement': investissement.idInvestissement}) }}" class="btn btn-outline-secondary btn-sm">Edit</a>
+                            </td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="5">No records found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col">
+            <a href="{{ path('app_projet') }}" class="btn btn-primary">Back to Project list</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
