@@ -13,22 +13,29 @@
                 <th scope="col">Content</th>
                 <th scope="col">Date</th>
                 <th scope="col">Actions</th>
+                <th scope="col">Translation</th>
             </tr>
             </thead>
             <tbody>
             {% for commentaire in commentaires %}
                 <tr>
                     <td>{{ commentaire.idCommentaire }}</td>
-                    <td>{{ commentaire.contenue }}</td>
+                    <td id="content-{{ commentaire.idCommentaire }}">{{ commentaire.contenue }}</td>
                     <td>{{ commentaire.dateCommentaire ? commentaire.dateCommentaire|date('Y-m-d') : '' }}</td>
                     <td>
                         <a href="{{ path('app_commentaire_show', {'idCommentaire': commentaire.idCommentaire}) }}" class="btn btn-sm btn-info">Show</a>
                         <a href="{{ path('app_commentaire_edit', {'idCommentaire': commentaire.idCommentaire}) }}" class="btn btn-sm btn-warning">Edit</a>
                     </td>
+                    <td>
+                        <form onsubmit="translateComment('{{ commentaire.idCommentaire }}'); return false;">
+                            <input type="hidden" id="comment_text_{{ commentaire.idCommentaire }}" value="{{ commentaire.contenue }}">
+                            <button type="submit" class="btn btn-sm btn-primary">Translate</button>
+                        </form>
+                    </td>
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="4">No records found</td>
+                    <td colspan="5">No records found</td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -36,4 +43,21 @@
     </div>
 
     <a href="{{ path('app_commentaire_new') }}" class="btn btn-primary">Create New Comment</a>
+
+    <script>
+        function translateComment(commentId) {
+            var commentText = document.getElementById('comment_text_' + commentId).value;
+            var url = "{{ path('app_commentaire_translate', {'idCommentaire': 'COMMENT_ID'}) }}".replace('COMMENT_ID', commentId);
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', url, true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    document.getElementById('content-' + commentId).textContent = response.translated_comment;
+                }
+            };
+            xhr.send('comment_text=' + encodeURIComponent(commentText));
+        }
+    </script>
 {% endblock %}

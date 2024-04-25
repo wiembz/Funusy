@@ -24,7 +24,7 @@
                     <td>
                         <a href="{{ path('app_commentaire_f_show', {'idCommentaire': commentaire.idCommentaire}) }}" class="btn btn-sm btn-info">Show</a>
                         <a href="{{ path('app_commentaire_f_edit', {'idCommentaire': commentaire.idCommentaire}) }}" class="btn btn-sm btn-warning">Edit</a>
-                        <a href="{{ path('app_signale_front_new', {'idCommentaire': commentaire.idCommentaire}) }}" class="btn btn-sm btn-danger">Signal</a>
+                        <a href="{{ path('app_signale_front_new', {'commentaireId': commentaire.idCommentaire}) }}" class="btn btn-sm btn-danger">Signal</a>
                     </td>
                 </tr>
             {% else %}

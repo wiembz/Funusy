@@ -1,8 +1,11 @@
-{% extends 'BACK/base.html.twig' %}
+{% extends 'baseF.html.twig' %}
 
 {% block title %}Signale index{% endblock %}
 
 {% block body %}
+    <br>
+    <br>
+    <br>
     <h1 class="mb-4">Signales</h1>
 
     <div class="table-responsive">
@@ -22,8 +25,8 @@
                     <td>{{ signale.dateSignal ? signale.dateSignal|date('Y-m-d') : '' }}</td>
                     <td>{{ signale.description }}</td>
                     <td>
-                        <a href="{{ path('app_signale_show', {'idSignal': signale.idSignal}) }}" class="btn btn-sm btn-info">Show</a>
-                        <a href="{{ path('app_signale_edit', {'idSignal': signale.idSignal}) }}" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="{{ path('app_signale_front_show', {'idSignal': signale.idSignal}) }}" class="btn btn-sm btn-info">Show</a>
+                        <a href="{{ path('app_signale_front_edit', {'idSignal': signale.idSignal}) }}" class="btn btn-sm btn-warning">Edit</a>
                     </td>
                 </tr>
             {% else %}
@@ -35,5 +38,5 @@
         </table>
     </div>
 
-    <a href="{{ path('app_signale_new') }}" class="btn btn-primary">Create New Signale</a>
+
 {% endblock %}
