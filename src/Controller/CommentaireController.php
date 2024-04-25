@@ -21,11 +21,24 @@ use Symfony\Component\Form\FormError;
 class CommentaireController extends AbstractController
 {
     #[Route('/commentaire', name: 'app_commentaire_index', methods: ['GET'])]
-    public function indexBACK(CommentaireRepository $commentaireRepository): Response
+    public function index(CommentaireRepository $commentaireRepository): Response
     {
         $commentaires = $commentaireRepository->findAll();
+
+        // Calcul des statistiques des commentaires par projet
+        $commentCounts = [];
+        foreach ($commentaires as $commentaire) {
+            $projet = $commentaire->getIdProjet()->getNomProjet();
+            if (!isset($commentCounts[$projet])) {
+                $commentCounts[$projet] = 1;
+            } else {
+                $commentCounts[$projet]++;
+            }
+        }
+
         return $this->render('commentaire/indexBACK.html.twig', [
             'commentaires' => $commentaires,
+            'commentCounts' => $commentCounts,
         ]);
     }
 
@@ -124,6 +137,4 @@ class CommentaireController extends AbstractController
         // Return translated comment as JSON response
         return $this->json(['translated_comment' => $translatedComment]);
     }
-
-
 }

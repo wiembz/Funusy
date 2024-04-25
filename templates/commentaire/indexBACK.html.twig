@@ -42,6 +42,9 @@
         </table>
     </div>
 
+    <h2 class="mt-4">Comment Counts by Project</h2>
+    <canvas id="commentCountsChart"></canvas>
+
     <a href="{{ path('app_commentaire_new') }}" class="btn btn-primary">Create New Comment</a>
 
     <script>
@@ -59,5 +62,41 @@
             };
             xhr.send('comment_text=' + encodeURIComponent(commentText));
         }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Extracting project names and counts from Twig variable
+        const projects = [];
+        const counts = [];
+        {% for projet, count in commentCounts %}
+        projects.push('{{ projet }}');
+        counts.push({{ count }});
+        {% endfor %}
+
+        // Create bar chart
+        var ctx = document.getElementById('commentCountsChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: projects,
+                datasets: [{
+                    label: 'Comment Counts',
+                    data: counts,
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
     </script>
 {% endblock %}
