@@ -30,10 +30,11 @@ class CreditFrontController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager= $this->getDoctrine()->getManager();
             $entityManager->persist($credit);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_credit_back_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_garantie_f_new', ['id_credit'=>$credit->getIdCredit()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('credit_back/new.html.twig', [

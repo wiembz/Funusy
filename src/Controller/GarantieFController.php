@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Credit;
 use App\Entity\Garantie;
 use App\Form\GarantieType;
 use App\Repository\GarantieRepository;
@@ -23,39 +24,49 @@ class GarantieFController extends AbstractController
         ]);
     }
 
-    #[Route('/new/fr', name: 'app_garantie_f_new', methods: ['GET', 'POST'])]
+    #[Route('/new/fr/{id_credit}', name: 'app_garantie_f_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $garantie = new Garantie();
+        $garantie->setIdCredit($request->get('id_credit'));
         $form = $this->createForm(GarantieType::class, $garantie);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            // Handle file upload
-            /** @var UploadedFile $file */
-            $file = $form->get('preuve')->getData();
+            // Compare montantCredit and valeurGarantie
+            $credit = $entityManager->getRepository(Credit::class)->find($garantie->getIdCredit());
+            if ($credit && $credit->getMontantCredit() <= $garantie->getValeurGarantie()) {
+                // Handle file upload
+                $file = $form->get('preuve')->getData();
 
-            if ($file) {
-                $fileName = md5(uniqid()).'.'.$file->guessExtension();
+                if ($file) {
+                    // Get the original file name
+                    $originalFileName = $file->getClientOriginalName();
+                    // Move the file to the directory where your files are stored
+                    $file->move(
+                        $this->getParameter('preuve_directory'),
+                        $originalFileName
+                    );
 
-                // Move the file to the directory where your files are stored
-                $file->move(
-                    $this->getParameter('preuve_directory'),
-                    $fileName
-                );
+                    // Update the 'preuve' property to store the file name instead of the file itself
+                    $garantie->setPreuve($originalFileName);
+                }
 
-                // Update the 'preuve' property to store the file name instead of the file itself
-                $garantie->setPreuve($fileName);
-                // Set the 'preuveOriginalFilename' property to store the original filename
-                $garantie->setPreuve($file->getClientOriginalName());
+                // Persist and flush the garantie entity
+                $entityManager->persist($garantie);
+                $entityManager->flush();
+
+                // Redirect to the index page after successful submission
+                return $this->redirectToRoute('app_garantie_f_index', [], Response::HTTP_SEE_OTHER);
+            } else {
+                // Handle error: valeurGarantie is less than montantCredit
+                // You can add a flash message or return a specific error response here
+                // For example:
+                $this->addFlash('error', 'La valeur de la garantie doit être supérieure ou égale au montant du crédit.');
             }
-
-            $entityManager->persist($garantie);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_garantie_f_index', [], Response::HTTP_SEE_OTHER);
         }
 
+        // Render the form template
         return $this->renderForm('garantie_f/new.html.twig', [
             'garantie' => $garantie,
             'form' => $form,

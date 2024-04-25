@@ -11,7 +11,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-
 #[ORM\Entity(repositoryClass: CreditRepository::class)]
 class Credit
 {
@@ -41,13 +40,18 @@ class Credit
     private ?float $tauxCredit;
 
     #[ORM\Column(name: "status", type: "string", length: 255, nullable: true, options: ["default" => "Non traité"])]
-    #[Assert\Choice(choices: ['Accepted', 'Rejected', 'Non traite'], message: 'Le statut doit être parmi les valeurs proposées')]
+    #[Assert\Choice(choices: ['Accepted', 'Rejected', 'Non traité'], message: 'Le statut doit être parmi les valeurs proposées')]
     private ?string $status = 'Non traité';
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: "id_user", referencedColumnName: "id_user")]
     #[Assert\NotBlank(message: 'L\'utilisateur est obligatoire')]
     private ?User $user;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Garantie", mappedBy="credit", cascade={"persist", "remove"})
+     */
+    private $garantie;
 
     public function getIdCredit(): ?int
     {
@@ -119,6 +123,32 @@ class Credit
         $this->user = $user;
         return $this;
     }
+
+    /**
+     * Get the value of garantie
+     */
+    public function getGarantie()
+    {
+        return $this->garantie;
+    }
+
+    /**
+     * Set the value of garantie
+     *
+     * @return  self
+     */
+    public function setGarantie($garantie)
+    {
+        $this->garantie = $garantie;
+
+        // Lier la garantie à ce crédit
+        if ($garantie !== null) {
+            $garantie->setCredit($this);
+        }
+
+        return $this;
+    }
+
     public function __toString()
     {
         return sprintf(
@@ -136,7 +166,6 @@ class Credit
     public function __construct()
     {
         $this->dateCredit = new DateTime(); // Initialise dateCredit avec la date locale actuelle
+        $this->status = 'Non traité';
     }
-
-
 }

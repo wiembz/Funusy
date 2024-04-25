@@ -27,13 +27,17 @@ class Garantie
     #[ORM\Column(name: "Valeur_Garantie", type: "float", precision: 10, scale: 0, nullable: true)]
     #[Assert\NotBlank(message: 'The value of the guarantee is mandatory')]
     #[Assert\Positive(message: 'The value of the guarantee must be positive')]
-    #[Assert\GreaterThanOrEqual(value: 10000, message: 'The value of the guarantee must be greater than or equal to 10000')]
-    #[AppAssert\MontantGarantieValide(options: ["montantCredit" => 12345])]
     private ?float $valeurGarantie;
 
     #[ORM\Column(name: "preuve", type: "string", length: 255, nullable: true)]
 
     private ?string $preuve;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Credit", inversedBy="garantie", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="id_credit", referencedColumnName="id_credit")
+     */
+    private $credit;
 
     public function getIdGarantie(): ?int
     {
@@ -83,11 +87,29 @@ class Garantie
         $this->preuve = $preuve;
         return $this;
     }
+
+    /**
+     * Get the value of credit
+     */
+    public function getCredit()
+    {
+        return $this->credit;
+    }
+
+    /**
+     * Set the value of credit
+     *
+     * @return  self
+     */
+    public function setCredit($credit)
+    {
+        $this->credit = $credit;
+
+        return $this;
+    }
+
     public function __construct()
     {
         $this->natureGarantie = ''; // Set a default value here
     }
-
-
-
 }

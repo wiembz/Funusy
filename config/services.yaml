@@ -10,6 +10,11 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+    App\Service\TwilioService:
+        arguments:
+            $twilioSid: "AC63a111f87e3f41a06a7a57a3cb709c52"
+            $twilioToken: "b7b196ecca455cd72e0b6606db3f49c1"
+            $twilioPhoneNumber: "+21693505363"
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
