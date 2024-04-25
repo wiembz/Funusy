@@ -15,13 +15,6 @@ use App\Repository\CompteRepository;
 #[Route('/transaction')]
 class TransactionController extends AbstractController
 {
-    #[Route('/f', name: 'app_transaction', methods: ['GET'])]
-    public function indexFRONT(TransactionRepository $transactionRepository): Response
-    {
-        return $this->render('transaction/indexFRONT.html.twig', [
-            'transactions' => $transactionRepository->findAll(),
-        ]);
-    }
     #[Route('/', name: 'app_transaction_index', methods: ['GET'])]
     public function indexBACK(TransactionRepository $transactionRepository): Response
     {
