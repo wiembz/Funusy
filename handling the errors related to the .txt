@@ -1,0 +1,6 @@
+//handling the errors related to the symfony version with some commands
+composer update --lock
+composer require symfony/runtime
+omposer update symfony/* 
+composer update --with-all-dependencies
+composer require symfony/console

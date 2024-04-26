@@ -1,11 +1,13 @@
 {% extends 'BACK/base.html.twig' %}
-
-{% block title %}New User{% endblock %}
-
+{% block title %}New user{% endblock %}
 {% block body %}
-    <h1>Create new User</h1>
-
-    {{ include('user/_form.html.twig') }}
-
-    <a href="{{ path('backend_user_index') }}">back to list</a>
+    <div class="content-wrapper">
+        <div class="container-xxl flex-grow-1 container-p-y">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    {{ include('user/_form.html.twig', {'button_label': 'Save'}) }}
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

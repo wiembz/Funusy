@@ -5,7 +5,8 @@
 {% block body %}
     <h1>User index</h1>
 
-    <table class="table">
+    <div class="table-responsive text-nowrap">
+        <table class="table table-striped">
         <thead>
             <tr>
                 <th>Id_user</th>
@@ -26,22 +27,37 @@
         <tbody>
         {% for user in users %}
             <tr>
-                <td>{{ user.idUser }}</td>
-                <td>{{ user.nomUser }}</td>
-                <td>{{ user.prenomUser }}</td>
-                <td>{{ user.emailUser }}</td>
-                <td>{{ user.mdp }}</td>
-                <td>{{ user.salaire }}</td>
-                <td>{{ user.dateNaissance ? user.dateNaissance|date('Y-m-d') : '' }}</td>
-                <td>{{ user.cin }}</td>
-                <td>{{ user.tel }}</td>
-                <td>{{ user.adresseUser }}</td>
-                <td>{{ user.roleUser }}</td>
-                <td>{{ user.numericCode }}</td>
+                <td>{{ user.getIdUser() }}</td>
+                <td>{{ user.getNomUser() }}</td>
+              <td>{{ user.getPrenomUser() }}</td>
+                <td>{{ user.getEmailUser() }}</td>
+                <td>{{ user.getMdp() }}</td>
+                <td>{{ user.getSalaire() }}</td>
+                <td>{{ user.getDateNaissance() ? user.getDateNaissance()|date('Y-m-d') : '' }}</td>
+                <td>{{ user.getCin() }}</td>
+                <td>{{ user.getTel() }}</td>
                 <td>
-                    <a href="{{ path('app_user_show', {'id_user': user.id_user}) }}">show</a>
-                    <a href="{{ path('backend_user_edit', {'id_user': user.id_user}) }}">edit</a>
-                </td>
+                    <select name="adresseUser" required>
+                        <option value="" disabled selected>Select Address</option>
+                        {% set adresseOptions = [
+                            'ARIANA', 'BEJA', 'BEN_AROUS', 'BIZERTE', 'GABES', 'GAFSA', 'JENDOUBA',
+                            'KAIROUAN', 'KASSERINE', 'KEBILI', 'KEF', 'MAHDIA', 'MANOUBA',
+                            'MEDENINE', 'MONASTIR', 'NABEUL', 'SFAX', 'SIDI_BOUZID', 'SILIANA',
+                            'SOUSSE', 'TATAOUINE', 'TOZEUR', 'TUNIS_CAPITALE', 'ZAGHOUAN'
+                        ] %}
+                        {% for option in adresseOptions %}
+                            <option value="{{ option }}" {% if option == user.getAdresseUser() %}selected{% endif %}>
+                                {{ option }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </td>                
+                <td>{{ user.getRoleUser()}}</td>
+                <td>{{ user.getNumericCode() }}</td>
+                <td>
+                    <a href="{{ path('app_user_show', {'id_user': user.getIdUser()}) }}">show</a>
+                    <a class="dropdown-item text-danger" href="{{ path('app_user_edit', {'id_user': user.getIdUser()}) }}">edit</a>
+            </td>
             </tr>
         {% else %}
             <tr>
@@ -51,5 +67,7 @@
         </tbody>
     </table>
 
-    <a href="{{ path('backend_user_new') }}">Create new</a>
+    <a href="{{ path('app_user_new') }}">Create new</a>
+    <a href="{{ path('stats_users') }}" class="btn btn-primary mb-3">View Role Statistics</a>
+
 {% endblock %}

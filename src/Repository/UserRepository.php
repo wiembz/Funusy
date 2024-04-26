@@ -45,4 +45,15 @@ class UserRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+public function countByRole()
+{
+    $entityManager = $this->getEntityManager();
+    $query = $entityManager->createQuery(
+        'SELECT u.roleUser, COUNT(u) AS count
+        FROM App\Entity\User u
+        GROUP BY u.roleUser'
+    );
+
+    return $query->getResult('array_combine');
+}
 }

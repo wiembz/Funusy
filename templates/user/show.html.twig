@@ -9,58 +9,58 @@
         <tbody>
             <tr>
                 <th>Id_user</th>
-                <td>{{ user.idUser }}</td>
+                <td>{{ user.getIdUser() }}</td>
             </tr>
             <tr>
                 <th>NomUser</th>
-                <td>{{ user.nomUser }}</td>
+                <td>{{ user.getNomUser() }}</td>
             </tr>
             <tr>
                 <th>PrenomUser</th>
-                <td>{{ user.prenomUser }}</td>
-            </tr>
+                <td>{{ user.getPrenomUser() }}</td>
+                </tr>
             <tr>
                 <th>EmailUser</th>
-                <td>{{ user.emailUser }}</td>
+                <td>{{ user.getEmailUser() }}</td>
             </tr>
             <tr>
                 <th>Mdp</th>
-                <td>{{ user.mdp }}</td>
+                <td>{{ user.getMdp() }}</td>
             </tr>
             <tr>
                 <th>Salaire</th>
-                <td>{{ user.salaire }}</td>
+                <td>{{ user.getSalaire() }}</td>
             </tr>
             <tr>
                 <th>DateNaissance</th>
-                <td>{{ user.dateNaissance ? user.dateNaissance|date('Y-m-d') : '' }}</td>
+                <td>{{ user.getDateNaissance() ? user.getDateNaissance()|date('Y-m-d') : '' }}</td>
             </tr>
             <tr>
                 <th>Cin</th>
-                <td>{{ user.cin }}</td>
+                <td>{{ user.getCin() }}</td>
             </tr>
             <tr>
                 <th>Tel</th>
-                <td>{{ user.tel }}</td>
+                <td>{{ user.getTel() }}</td>
             </tr>
             <tr>
                 <th>AdresseUser</th>
-                <td>{{ user.adresseUser }}</td>
+                <td>{{ user.getAdresseUser() }}</td>
             </tr>
             <tr>
                 <th>RoleUser</th>
-                <td>{{ user.roleUser }}</td>
+                <td>{{ user.getRoleUser() }}</td>
             </tr>
             <tr>
                 <th>NumericCode</th>
-                <td>{{ user.numericCode }}</td>
+                <td>{{ user.getNumericCode() }}</td>
             </tr>
         </tbody>
     </table>
 
     <a href="{{ path('app_user_index') }}">back to list</a>
 
-    <a href="{{ path('backend_user_edit', {'id_user': user.id_user}) }}">edit</a>
+    <a href="{{ path('app_user_edit', {'id_user': user.getIdUser()}) }}">edit</a>
 
     {{ include('user/_delete_form.html.twig') }}
 {% endblock %}
