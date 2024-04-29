@@ -1,19 +1,24 @@
 <?php
 
 namespace App\Entity;
-
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CompteRepository;
+use App\Entity\User;
 
 #[ORM\Entity(repositoryClass: CompteRepository::class)]
 class Compte
 {
+     #[ORM\Column(name: "id_user", type: "integer", nullable: true)]
+    private ?int $id_user;
+
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: "id_user", referencedColumnName: "id_user")]
+    private ?User $User=null;  
     // Define primary key with the 'rib' attribute
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: "IDENTITY")]
     #[ORM\Column(name: "rib", type: "string", length: 20, nullable: false)]
     private string $rib;
+    
 
     // Define 'solde' attribute representing the balance of the account
     #[ORM\Column(name: "solde", type: "float", precision: 10, scale: 0, nullable: false)]
@@ -27,16 +32,14 @@ class Compte
     #[ORM\Column(name: "type_compte", type: "string", length: 255, nullable: false)]
     private string $typeCompte;
 
-    #[ORM\Column(name: "id_user", type: "integer", nullable: true)]
-    private ?int $id_user;
+   
+    
+    public function setRib(string $rib): static
+{
+    $this->rib = $rib;
 
-    #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(name: "id_user", referencedColumnName: "id_user")]
-    private ?User $user;
-
-
-
-    // Getters and setters for each attribute
+    return $this;
+}
 
     public function getRib(): ?string
     {
@@ -78,23 +81,29 @@ class Compte
 
     public function getIdUser(): ?int
     {
-        return $this->idUser;
+        return $this->id_user;
     }
 
     public function setIdUser(?int $idUser): static
     {
-        $this->idUser = $idUser;
+        $this->id_user = $idUser;
         return $this;
     }
 
     public function getUser(): ?User
     {
-        return $this->user;
+        return $this->User;
     }
-
     public function setUser(?User $user): static
     {
-        $this->user = $user;
+        $this->User = $user; 
         return $this;
     }
+   
+    public function __construct()
+    {
+        // Initialize the id_user property here
+        $this->id_user = null; // Or set it to a default value if appropriate
+    }
+
 }
