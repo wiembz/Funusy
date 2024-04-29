@@ -16,7 +16,7 @@ class CarteBancaireType extends AbstractType
             ->add('code')
             ->add('cvv2')
             ->add('rib')
-        ;
+            ->add('num_carte');
     }
 
     public function configureOptions(OptionsResolver $resolver): void

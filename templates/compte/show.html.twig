@@ -134,7 +134,7 @@
                 <div class="mt-4 text-center">
                     {{ include('compte/_delete_form.html.twig') }}
                     <a href="{{ path('app_compte_edit', {'rib': compte.rib}) }}" class="btn btn-primary">Edit</a>
-                  
+                    <a href="{{ path('generate_pdf', {'rib': compte.rib}) }}" class="btn btn-primary">Get PDF</a>
                 </div>
             </div>
         </div>

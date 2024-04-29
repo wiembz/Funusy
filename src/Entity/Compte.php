@@ -3,17 +3,10 @@
 namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CompteRepository;
-use App\Entity\User;
 
 #[ORM\Entity(repositoryClass: CompteRepository::class)]
 class Compte
 {
-     #[ORM\Column(name: "id_user", type: "integer", nullable: true)]
-    private ?int $id_user;
-
-    #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(name: "id_user", referencedColumnName: "id_user")]
-    private ?User $User=null;  
     // Define primary key with the 'rib' attribute
     #[ORM\Id]
     #[ORM\Column(name: "rib", type: "string", length: 20, nullable: false)]
@@ -32,7 +25,15 @@ class Compte
     #[ORM\Column(name: "type_compte", type: "string", length: 255, nullable: false)]
     private string $typeCompte;
 
-   
+    #[ORM\Column(name: "id_user", type: "integer", nullable: true)]
+    private ?int $id_user;
+
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: "id_user", referencedColumnName: "id_user")]
+    private ?User $User;  
+
+    #[ ORM\OneToMany(targetEntity:CarteBancaire::class, mappedBy:"rib")]
+  private $cartesBancaires;
     
     public function setRib(string $rib): static
 {
@@ -99,7 +100,10 @@ class Compte
         $this->User = $user; 
         return $this;
     }
-   
+    public function getCartesBancaires()
+    {
+        return $this->cartesBancaires;
+    }
     public function __construct()
     {
         // Initialize the id_user property here

@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Controller;
-
 use App\Entity\Compte;
 use App\Form\CompteType;
 use App\Repository\CompteRepository;
@@ -13,14 +12,55 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Entity\User;
 use App\Repository\UserRepository;
-
-
 use DateTime;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+
 
 #[Route('/compte')]
 class CompteController extends AbstractController
 {   
-    
+    private $entityManager;
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
+    #[Route('/generate-pdf/{rib}', name: 'generate_pdf')]
+    public function generatePdf($rib): Response
+    {
+        // Get the account details from the database (assuming you have a method to retrieve the account details)
+        $compte = $this->entityManager->getRepository(Compte::class)->findOneBy(['rib' => $rib]);
+
+        // Render the HTML template for the account details
+        $html = $this->renderView('compte/account_details.html.twig', [
+            'compte' => $compte,
+        ]);
+
+        // Configure Dompdf options
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+        $options->set('isRemoteEnabled', true);
+
+        // Instantiate Dompdf with the configured options
+        $dompdf = new Dompdf($options);
+
+        // Load HTML content into Dompdf
+        $dompdf->loadHtml($html);
+
+        // Set paper size and orientation (optional)
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render PDF (optional: you can save the PDF to a file using $dompdf->stream())
+        $dompdf->render();
+
+        // Output PDF as a response
+        return new Response($dompdf->output(), 200, [
+            'Content-Type' => 'application/pdf',
+        ]);
+    }
+
     #[Route('/get-user-details/{userId}', name: 'get_user_details')]
 public function getUserDetails($userId, UserRepository $userRepository): JsonResponse
 {
@@ -140,4 +180,5 @@ public function getUserDetails($userId, UserRepository $userRepository): JsonRes
         }
         return $rib;
     }
+   
 }
