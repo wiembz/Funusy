@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Controller;
+use App\Service\TwilioService;
 
 use App\Entity\CarteBancaire;
 use App\Form\CarteBancaireType;
@@ -17,6 +18,10 @@ use DateTime;
 #[Route('/carte/bancaire/back')]
 class CarteBancaireBackController extends AbstractController
 {
+   
+
+
+
     #[Route('/ccc', name: 'app_newcarte_bancaire_back')]
     public function carddd(Request $request, EntityManagerInterface $entityManager):Response
     {
@@ -41,7 +46,7 @@ class CarteBancaireBackController extends AbstractController
             'cardName' => $cardName,
             'cardExpiration' => $cardExpiration->format('Y-m-d'), // Format card expiration as YYYY-MM-DD
             'cardCvv' => $cardCvv,
-            'rib' => "85843591015235480093",
+            'rib' =>  $rib,
         ];
 
         $carte = new CarteBancaire();
