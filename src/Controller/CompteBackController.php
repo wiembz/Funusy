@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Knp\Component\Pager\PaginatorInterface;
 
 use DateTime;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -52,10 +53,6 @@ class CompteBackController extends AbstractController // Extend AbstractControll
     }
 
    
-
-
-
-
 
     #[Route('/{rib}', name: 'app_compte_back_delete', methods: ['POST'])]
     public function delete(Request $request, Compte $compte, EntityManagerInterface $entityManager): Response
@@ -139,19 +136,30 @@ class CompteBackController extends AbstractController // Extend AbstractControll
     }
 
     #[Route('/', name: 'app_compte_back_index', methods: ['GET', 'POST'])]
-    public function indexFRONT(CompteRepository $compteRepository): Response
-    {
+    public function indexFRONT(
+        Request $request,
+        CompteRepository $compteRepository,
+        PaginatorInterface $paginator // Inject the PaginatorInterface
+    ): Response {
+        // Get all the comptes from the repository
+        $query = $compteRepository->createQueryBuilder('c')->getQuery();
+    
+        // Paginate the query
+        $comptes = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1), // Get the current page from the request
+            10 // Number of items per page
+        );
+    
         $compte = new Compte();
         $form = $this->createForm(CompteType::class, $compte);
     
         return $this->render('compte_back/indexBACK.html.twig', [
-            'comptes' => $compteRepository->findAll(),
-            'form' => $form->createView(), 
+            'comptes' => $comptes,
+            'form' => $form->createView(),
         ]);
     }
     
-
-
 
     #[Route('/{rib}/edit', name: 'app_compte_back_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Compte $compte, EntityManagerInterface $entityManager): Response

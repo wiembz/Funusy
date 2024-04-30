@@ -20,6 +20,9 @@
             <a href="{{ path('app_compte_back_new') }}" class="btn btn-success">Create New</a>
             <a href="{{ path('app_comptes_statistics') }}" class="btn btn-primary">Statistics</a>
         </div>
+        <div class="mt-4">
+            {% include 'compte_back/pagination.html.twig' with {'pagination': comptes} %}
+        </div>
     </div>
 
     {% block search %}
