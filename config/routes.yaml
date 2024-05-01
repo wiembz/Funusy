@@ -5,3 +5,5 @@ app_projet_back_project_markers:
     path: /project/markers
     controller: App\Controller\ProjetBackController::projectMarkers
     methods: [GET]
+# config/routes.yaml
+

@@ -80,5 +80,15 @@ public function getInvestedProjectsByType(): array
 
     return $queryBuilder->getQuery()->getResult();
 }
+//search projects
+public function searchProjects($search): array
+{
+    $queryBuilder = $this->createQueryBuilder('p')
+        ->where('p.nomProjet LIKE :search')
+        ->setParameter('search', '%'.$search.'%');
+
+    return $queryBuilder->getQuery()->getResult();
+}
+
 }  
 

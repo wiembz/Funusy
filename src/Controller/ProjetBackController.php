@@ -14,6 +14,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Form\FormError; // Include the FormError class
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\SerializerInterface;
+
 
 #[Route('/projet/back')]
 class ProjetBackController extends AbstractController
@@ -30,6 +32,20 @@ class ProjetBackController extends AbstractController
                 'projectCountByType' => $projectCountByType,
                 'investedProjectCount' => $investedProjectCount,
             ]);
+        }
+        #[Route('/search', name: 'app_projet_back_search', methods: ['GET'])]
+        public function search(Request $request, ProjetRepository $projetRepository, SerializerInterface $serializer): JsonResponse
+        {
+            $query = $request->query->get('query');
+        
+            // Use the query to filter the projects
+            $filteredProjects = $projetRepository->searchProjects($query);
+        
+            // Serialize the filtered projects to JSON
+            $jsonData = $serializer->serialize($filteredProjects, 'json');
+        
+            // Return a JSON response containing the filtered projects data
+            return new JsonResponse($jsonData, Response::HTTP_OK, [], true);
         }
         #[Route('/chart', name: 'app_projet_back_chart')]
         public function chart(ProjetRepository $projetRepository): JsonResponse
