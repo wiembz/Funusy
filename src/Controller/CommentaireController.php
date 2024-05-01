@@ -20,6 +20,14 @@ use Symfony\Component\Form\FormError;
 
 class CommentaireController extends AbstractController
 {
+    #[Route('/front', name: 'app_commentaire', methods: ['GET'])]
+    public function indexfront(CommentaireRepository $commentaireRepository): Response
+    {
+        $commentaires = $commentaireRepository->findAll();
+        return $this->render('commentaire_f/index.html.twig', [
+            'commentaires' => $commentaires,
+        ]);
+    }
     #[Route('/commentaire', name: 'app_commentaire_index', methods: ['GET'])]
     public function index(CommentaireRepository $commentaireRepository): Response
     {
@@ -39,6 +47,20 @@ class CommentaireController extends AbstractController
         return $this->render('commentaire/indexBACK.html.twig', [
             'commentaires' => $commentaires,
             'commentCounts' => $commentCounts,
+        ]);
+    }
+    //recheche avancée
+
+
+  
+
+    #[Route('/commentaire/show-mail-form/{idCommentaire}', name: 'app_commentaire_show_mail_form', methods: ['GET'])]
+    public function showMailForm(Request $request, Commentaire $commentaire): Response
+    {
+        $mailForm = $this->createForm(MailingFormType::class);
+        return $this->render('commentaire/mail_form.html.twig', [
+            'commentaire' => $commentaire,
+            'mailForm' => $mailForm->createView(),
         ]);
     }
 

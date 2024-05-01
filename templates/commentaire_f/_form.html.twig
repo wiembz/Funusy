@@ -27,5 +27,36 @@
         </div>
     </div>
 </div>
-<button type="submit" class="btn btn-primary">{{ button_label|default('Save') }}</button>
+<button onclick="validateForm()" type="submit" class="btn btn-primary">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
+
+<script>
+    function validateForm() {
+        var contentField = document.getElementById('{{ form.contenue.vars.id }}');
+        var contentValue = contentField.value.trim();
+
+        // Retrieve the submitted comments from localStorage
+        var submittedComments = localStorage.getItem('submittedComments');
+
+        // Check if there are any submitted comments
+        if (submittedComments) {
+            // Split the submitted comments into an array
+            var submittedCommentsArray = submittedComments.split(',');
+            // Check if the array length exceeds 3
+            if (submittedCommentsArray.length >= 3) {
+                // If more than 3 comments have been submitted, disable the button and show an alert
+                alert('You have exceeded the maximum number of comments allowed.');
+                document.querySelector('button[type="submit"]').disabled = true;
+                // Enable the button after 10 seconds
+                setTimeout(function() {
+                    document.querySelector('button[type="submit"]').disabled = false;
+                }, 10000);
+                return false; // Prevent form submission
+            }
+        }
+
+        // If less than 3 comments have been submitted, add the current comment to the list
+        localStorage.setItem('submittedComments', submittedComments ? submittedComments + ',' + contentValue : contentValue);
+        return true; // Allow form submission
+    }
+</script>

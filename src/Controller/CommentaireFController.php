@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Commentaire;
 use App\Form\CommentaireType;
 use App\Repository\CommentaireRepository;
+use App\Service\BadWordsLoader;
+use App\Service\GoogleTranslatorService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,15 +19,11 @@ use Symfony\Component\Form\FormError;
 #[Route('/commentaire/front')]
 class CommentaireFController extends AbstractController
 {
-    #[Route('/', name: 'app_commentaire_f_index', methods: ['GET'])]
-    public function index(CommentaireRepository $commentaireRepository): Response
-    {
-        $commentaires = $commentaireRepository->findAll();
-        return $this->render('commentaire_f/index.html.twig', [
-            'commentaires' => $commentaires,
-        ]);
-    }
 
+
+    /**
+     * @throws \Exception
+     */
     #[Route('/new/front', name: 'app_commentaire_f_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, CommentaireRepository $commentaireRepository): Response
     {
@@ -44,6 +42,19 @@ class CommentaireFController extends AbstractController
                 ]);
             }
 
+            // Check for bad words
+            $commentText = $commentaire->getContenue();
+            $badWords = BadWordsLoader::loadBadWords("C:\\Users\\ASUS\\Downloads\\validationmetier\\List.txt");
+            foreach ($badWords as $badWord) {
+                if (stripos($commentText, $badWord) !== false) {
+                    $form->get('contenue')->addError(new FormError('Your comment contains inappropriate words.'));
+                    return $this->renderForm('commentaire_f/new.html.twig', [
+                        'commentaire' => $commentaire,
+                        'form' => $form,
+                    ]);
+                }
+            }
+
             // If not duplicate, persist the Commentaire entity
             $entityManager->persist($commentaire);
             $entityManager->flush();
@@ -56,7 +67,6 @@ class CommentaireFController extends AbstractController
             'form' => $form,
         ]);
     }
-
     #[Route('/{idCommentaire}/front', name: 'app_commentaire_f_show', methods: ['GET'])]
     public function show(Commentaire $commentaire): Response
     {
@@ -91,6 +101,21 @@ class CommentaireFController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_commentaire_f_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_commentaire', [], Response::HTTP_SEE_OTHER);
     }
+    #[Route('/commentaire/translate/{idCommentaire}', name: 'app_commentaire_translate', methods: ['POST'])]
+    public function translate(Request $request, GoogleTranslatorService $translator, int $idCommentaire): Response
+    {
+        // Retrieve parameters from the request
+        $langFrom = 'fr'; // Assuming comments are in French
+        $langTo = 'en';   // Target language is English
+        $commentText = $request->request->get('comment_text');
+
+        // Call translation service
+        $translatedComment = $translator->translate($langFrom, $langTo, $commentText);
+
+        // Return translated comment as JSON response
+        return $this->json(['translated_comment' => $translatedComment]);
+    }
+
 }

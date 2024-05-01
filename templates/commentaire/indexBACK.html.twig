@@ -14,6 +14,7 @@
                 <th scope="col">Date</th>
                 <th scope="col">Actions</th>
                 <th scope="col">Translation</th>
+                <th scope="col">Texting</th>
             </tr>
             </thead>
             <tbody>
@@ -32,10 +33,13 @@
                             <button type="submit" class="btn btn-sm btn-primary">Translate</button>
                         </form>
                     </td>
+                    <td>
+                        <button class="btn btn-sm btn-secondary" onclick="showMailForm('{{ commentaire.idCommentaire }}')">Texting</button>
+                    </td>
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="5">No records found</td>
+                    <td colspan="6">No records found</td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -46,6 +50,25 @@
     <canvas id="commentCountsChart"></canvas>
 
     <a href="{{ path('app_commentaire_new') }}" class="btn btn-primary">Create New Comment</a>
+
+    <div id="mailForm" style="display: none;">
+        <h3>Send Mail</h3>
+        <form>
+            <div class="form-group">
+                <label for="recipient">Recipient:</label>
+                <input type="text" class="form-control" id="recipient" name="recipient">
+            </div>
+            <div class="form-group">
+                <label for="subject">Subject:</label>
+                <input type="text" class="form-control" id="subject" name="subject">
+            </div>
+            <div class="form-group">
+                <label for="content">Content:</label>
+                <textarea class="form-control" id="content" name="content"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Send</button>
+        </form>
+    </div>
 
     <script>
         function translateComment(commentId) {
@@ -62,8 +85,16 @@
             };
             xhr.send('comment_text=' + encodeURIComponent(commentText));
         }
+
+        function showMailForm(commentId) {
+            var mailForm = document.getElementById("mailForm");
+            mailForm.style.display = "block";
+        }
     </script>
 
+    <div style="width: 100px; height: 75px;">
+        <canvas id="commentCountsChartTiny"></canvas>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         // Extracting project names and counts from Twig variable
@@ -74,9 +105,9 @@
         counts.push({{ count }});
         {% endfor %}
 
-        // Create bar chart
-        var ctx = document.getElementById('commentCountsChart').getContext('2d');
-        var myChart = new Chart(ctx, {
+        // Create tiny bar chart
+        var ctxTiny = document.getElementById('commentCountsChartTiny').getContext('2d');
+        var myTinyChart = new Chart(ctxTiny, {
             type: 'bar',
             data: {
                 labels: projects,
@@ -89,14 +120,40 @@
                 }]
             },
             options: {
+                layout: {
+                    padding: {
+                        left: 2,
+                        right: 2,
+                        top: 2,
+                        bottom: 2
+                    }
+                },
+                responsive: false,
+                maintainAspectRatio: false,
+                legend: {
+                    display: false
+                },
                 scales: {
                     yAxes: [{
                         ticks: {
-                            beginAtZero: true
+                            display: false
+                        },
+                        gridLines: {
+                            display: false
+                        }
+                    }],
+                    xAxes: [{
+                        ticks: {
+                            display: false
+                        },
+                        gridLines: {
+                            display: false
                         }
                     }]
                 }
             }
         });
     </script>
+
+
 {% endblock %}
