@@ -69,6 +69,28 @@ class CreditController extends AbstractController
         ]);
     }
 
+    #[Route('/search', name: 'app_credit_search', methods: ['GET'])]
+    public function search(Request $request, CreditRepository $creditRepository): Response
+    {
+        $query = $request->query->get('query');
+
+        if ($query) {
+            $credits = $creditRepository->findByPartialStatus($query);
+        } else {
+            $credits = $creditRepository->findAll();
+        }
+
+        if ($request->isXmlHttpRequest()) {
+            return $this->render('credit/search_results.html.twig', [
+                'credits' => $credits,
+            ]);
+        } else {
+            return $this->render('credit/indexBACK.html.twig', [
+                'credits' => $credits,
+            ]);
+        }
+    }
+
 
     #[Route('/{idCredit}', name: 'app_credit_show', methods: ['GET'])]
     public function show(Credit $credit): Response

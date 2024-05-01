@@ -5,7 +5,11 @@
 {% block body %}
     <h1>Credit index</h1>
 
-    <table class="table">
+    <!-- Champ de recherche dynamique -->
+    <input type="text" id="searchInput" placeholder="Search by status">
+
+    <!-- Tableau des crédits -->
+    <table id="creditTable" class="table">
         <thead>
         <tr>
             <th>IdCredit</th>
@@ -15,11 +19,10 @@
             <th>TauxCredit</th>
             <th>Status</th>
             <th>User</th>
-            <th>actions</th>
-
+            <th>Actions</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="creditTableBody">
         {% for credit in credits %}
             <tr>
                 <td>{{ credit.getIdCredit() }}</td>
@@ -29,9 +32,6 @@
                 <td>{{ credit.getTauxCredit() }}</td>
                 <td>{{ credit.getStatus() }}</td>
                 <td>{{ credit.getUser() ? credit.getUser().getNomUser() : 'Utilisateur inconnu' }}</td>
-
-
-
                 <td>
                     <a href="{{ path('app_credit_show', {'idCredit': credit.idCredit}) }}">show</a>
                     <a href="{{ path('app_credit_edit', {'idCredit': credit.idCredit}) }}">edit</a>
@@ -39,11 +39,35 @@
             </tr>
         {% else %}
             <tr>
-                <td colspan="7">no records found</td>
+                <td colspan="8">No records found</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
+    <!-- Lien pour créer un nouveau crédit -->
     <a href="{{ path('app_credit_new') }}">Create new</a>
+
+    <!-- Script JavaScript pour gérer la recherche dynamique -->
+    <script>
+        $(document).ready(function() {
+            $("#searchInput").on("input", function () {
+                var query = $(this).val();
+
+                // Faire une requête Ajax vers l'endpoint de recherche
+                $.ajax({
+                    url: "{{ path('app_credit_search') }}",
+                    type: 'GET',
+                    dataType: 'html',
+                    data: { query: query },
+                    success: function(data) {
+                        $("#creditTableBody").html(data);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            });
+        });
+    </script>
 {% endblock %}

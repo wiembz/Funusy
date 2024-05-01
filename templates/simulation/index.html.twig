@@ -1,0 +1,39 @@
+{% extends 'baseF.html.twig' %}
+
+{% block title %}Simulation de crédit{% endblock %}
+
+{% block body %}
+    <h1>Simulation de crédit</h1>
+
+    {{ form_start(form) }}
+    {{ form_row(form.montant) }}
+    {{ form_row(form.duree) }}
+    {{ form_row(form.taux) }}
+
+    <button type="submit">Valider</button>
+    {{ form_end(form) }}
+
+    {% if result %}
+        <h2>Résultats de la simulation :</h2>
+        <table>
+            <tr>
+                <th>Numéro</th>
+                <th>Échéance</th>
+                <th>Principal</th>
+                <th>Valeur Résiduelle</th>
+                <th>Intérêts</th>
+                <th>Mensualité</th>
+            </tr>
+            {% for echeance in result %}
+                <tr>
+                    <td>{{ echeance.numero }}</td>
+                    <td>{{ echeance.echeance|date('d/m/Y') }}</td>
+                    <td>{{ echeance.principal }}</td>
+                    <td>{{ echeance.valeurResiduelle }}</td>
+                    <td>{{ echeance.interets }}</td>
+                    <td>{{ echeance.mensualite }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+{% endblock %}

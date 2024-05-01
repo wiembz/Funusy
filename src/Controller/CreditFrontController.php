@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Echeance;
 use App\Entity\Credit;
 use App\Form\CreditType;
 use App\Repository\CreditRepository;

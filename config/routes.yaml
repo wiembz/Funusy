@@ -2,3 +2,7 @@
 #    path: /
 #    controller: App\Controller\DefaultController::index
 #    methods: [GET]
+search_endpoint:
+  path: /search-endpoint
+  controller: App\Controller\CreditController::search
+  methods: ['POST']

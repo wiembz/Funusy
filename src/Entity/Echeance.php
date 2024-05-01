@@ -89,4 +89,9 @@ class Echeance
         $this->mensualite = $mensualite;
         return $this;
     }
+
+    public function setNumero(int $i)
+    {
+        $this->numero = $i;
+    }
 }

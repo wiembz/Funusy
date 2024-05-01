@@ -3,14 +3,14 @@
 {% block title %}Edit Credit{% endblock %}
 
 {% block body %}
-    <br>
-    <br>
-    <br>
-    <h1>Edit Credit</h1>
+    <div class="container" style="padding: 100px 0">
+        <h1>Edit Credit</h1>
 
-    {{ include('credit_back/_form.html.twig', {'button_label': 'Update'}) }}
+        {{ include('credit_back/_form.html.twig', {'button_label': 'Update'}) }}
 
-    <a href="{{ path('app_credit_back_index') }}">back to list</a>
+        <a href="{{ path('app_credit_back_index') }}">back to list</a>
 
-    {{ include('credit_back/_delete_form.html.twig') }}
+        {{ include('credit_back/_delete_form.html.twig') }}
+    </div>
+
 {% endblock %}

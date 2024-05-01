@@ -360,7 +360,7 @@
                         <a class="nav-link" id="nav-tab-2" data-toggle="tab" href="#credit-tab-2" role="tab" aria-controls="credit-tab-2" aria-selected="false"><i class="fas fa-envelope-open-text"></i>Guarantee details</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="nav-tab-3" data-toggle="tab" href="#credit-tab-3" role="tab" aria-controls="credit-tab-3" aria-selected="false"><i class="fas fa-envelope-open-text"></i>Credit simulation</a>
+                        <a class="nav-link" id="nav-tab-3" data-toggle="tab" href="#credit-tab-3" role="tab" aria-controls="credit-tab-3" aria-selected="false"><i class="fas fa-envelope-open-text"></i>Simulation de crédit</a>
                     </li>
 
                 </ul>
@@ -443,11 +443,47 @@
                         </div> <!-- end of row -->
                     </div> <!-- end of tab-pane -->
                     <!-- end of tab -->
-
                     <!-- Tab -->
+                    <div class="tab-pane fade" id="credit-tab-3" role="tabpanel" aria-labelledby="credit-tab-3">
+                        <div class="row">
+                            <div class="col-lg-6">
+
+                                <div class="image-container">
+
+                                    <img class="img-fluid" src="{{ asset('FRONT/images/card_form.png') }}" alt="alternative">
+                                </div> <!-- end of image-container -->
+                            </div> <!-- end of col -->
+                            <div class="col-lg-6">
+                                <div class="text-container">
+                                    <h3> Simulation </h3>
+                                    <ul class="list-unstyled li-space-lg">
+                                        <li class="media">
+                                            <i class="fas fa-square"></i>
+                                            <div class="media-body">Tax Efficiency </div>
+                                        </li>
+                                        <li class="media">
+                                            <i class="fas fa-square"></i>
+                                            <div class="media-body">Payment Flexibility</div>
+                                        </li>
+                                        <li class="media">
+                                            <i class="fas fa-square"></i>
+                                            <div class="media-body">Streamlined Processes.</div>
+                                        </li>
+
+                                        &nbsp &nbsp
+                                        <h6>Guarantee to Return the Credit,Your Financial Trust, We Respect!!</h6>
+                                    </ul>
+                                    <a class="btn-solid-reg" href="{{ path('app_simulation_index') }}">Open Simulateur</a>
+                                </div> <!-- end of text-container -->
+                            </div> <!-- end of col -->
+                        </div> <!-- end of row -->
+                    </div> <!-- end of tab-pane -->
+
+
 
 
                 </div> <!-- end of tab content -->
+
                 <!-- end of tabs content -->
 
             </div> <!-- end of col -->
