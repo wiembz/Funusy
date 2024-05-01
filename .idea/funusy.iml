@@ -138,6 +138,9 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/amqp-messenger" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/redis-messenger" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/security-guard" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/swiftmailer/swiftmailer" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/swiftmailer-bridge" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/swiftmailer-bundle" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

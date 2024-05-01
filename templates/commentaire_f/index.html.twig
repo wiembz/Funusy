@@ -13,7 +13,7 @@
                 <th scope="col">Content</th>
                 <th scope="col">Date</th>
                 <th scope="col">Actions</th>
-                <th scope="col">Translation</th> <!-- Added Translation Header -->
+                <th scope="col">Translation</th>
             </tr>
             </thead>
             <tbody>
@@ -23,17 +23,21 @@
                     <td id="content-{{ commentaire.idCommentaire }}">{{ commentaire.contenue }}</td>
                     <td>{{ commentaire.dateCommentaire ? commentaire.dateCommentaire|date('Y-m-d') : '' }}</td>
                     <td>
+                        <!-- Like and dislike icons with onclick events -->
+                        <i class="far fa-thumbs-up like-icon" onclick="toggleIconColor(this)"></i>
                         <a href="{{ path('app_commentaire_f_show', {'idCommentaire': commentaire.idCommentaire}) }}" class="btn btn-sm btn-info">Show</a>
+                        <i class="far fa-thumbs-down dislike-icon" onclick="toggleIconColor(this)"></i>
                         <a href="{{ path('app_commentaire_f_edit', {'idCommentaire': commentaire.idCommentaire}) }}" class="btn btn-sm btn-warning">Edit</a>
+                        <i class="far fa-flag flag-icon" onclick="toggleIconColor(this)"></i>
                         <a href="{{ path('app_signale_front_new', {'commentaireId': commentaire.idCommentaire}) }}" class="btn btn-sm btn-danger">Signal</a>
                     </td>
                     <td>
-                        <button class="btn btn-sm btn-primary" onclick="translateComment('{{ commentaire.idCommentaire }}')">Translate</button> <!-- Added Translate Button -->
+                        <button class="btn btn-sm btn-primary" onclick="translateComment('{{ commentaire.idCommentaire }}')">Translate</button>
                     </td>
                 </tr>
             {% else %}
                 <tr>
-                    <td colspan="5">No records found</td> <!-- Adjusted colspan -->
+                    <td colspan="5">No records found</td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -41,10 +45,13 @@
     </div>
 
     <a href="{{ path('app_commentaire_f_new') }}" class="btn btn-primary">Create New Comment</a>
-    <!-- Testimonials -->
-    <!-- Rest of the code... -->
 
     <script>
+        function toggleIconColor(icon) {
+            // Add or remove the 'active-icon' class
+            icon.classList.toggle('active-icon');
+        }
+
         function translateComment(commentId) {
             var commentText = document.getElementById('content-' + commentId).innerText;
             var xhr = new XMLHttpRequest();

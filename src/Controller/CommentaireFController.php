@@ -24,6 +24,7 @@ class CommentaireFController extends AbstractController
     /**
      * @throws \Exception
      */
+
     #[Route('/new/front', name: 'app_commentaire_f_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, CommentaireRepository $commentaireRepository): Response
     {
@@ -67,6 +68,7 @@ class CommentaireFController extends AbstractController
             'form' => $form,
         ]);
     }
+
     #[Route('/{idCommentaire}/front', name: 'app_commentaire_f_show', methods: ['GET'])]
     public function show(Commentaire $commentaire): Response
     {
@@ -96,13 +98,14 @@ class CommentaireFController extends AbstractController
     #[Route('/{idCommentaire}/front', name: 'app_commentaire_f_delete', methods: ['POST'])]
     public function delete(Request $request, Commentaire $commentaire, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$commentaire->getIdCommentaire(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $commentaire->getIdCommentaire(), $request->request->get('_token'))) {
             $entityManager->remove($commentaire);
             $entityManager->flush();
         }
 
         return $this->redirectToRoute('app_commentaire', [], Response::HTTP_SEE_OTHER);
     }
+
     #[Route('/commentaire/translate/{idCommentaire}', name: 'app_commentaire_translate', methods: ['POST'])]
     public function translate(Request $request, GoogleTranslatorService $translator, int $idCommentaire): Response
     {

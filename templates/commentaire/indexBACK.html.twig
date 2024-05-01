@@ -53,7 +53,7 @@
 
     <div id="mailForm" style="display: none;">
         <h3>Send Mail</h3>
-        <form>
+        <form action="{{ path('app_commentaire_send_mail') }}" method="post">
             <div class="form-group">
                 <label for="recipient">Recipient:</label>
                 <input type="text" class="form-control" id="recipient" name="recipient">
