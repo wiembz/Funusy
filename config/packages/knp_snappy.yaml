@@ -1,0 +1,15 @@
+knp_snappy:
+
+  pdf:
+
+    enabled:    true
+
+    binary:     '%kernel.project_dir%/vendor/h4cc/wkhtmltopdf-i386/bin/wkhtmltopdf.exe'
+
+    options:
+
+      no-outline: true
+
+      page-size: A4
+
+      encoding: UTF-8

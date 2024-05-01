@@ -31,8 +31,7 @@
     </table>
 
     <a href="{{ path('app_transactionfront_index') }}">back to list</a>
-
-    <a href="{{ path('app_transactionfront_edit', {'idTransaction': transaction.idTransaction}) }}">edit</a>
+    <a href="{{ path('app_transaction_pdf', {'idTransaction': transaction.idTransaction}) }}">Generate PDF</a>
 
     {{ include('transactionfront/_delete_form.html.twig') }}
 {% endblock %}

@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\CompteRepository;
+use Knp\Snappy\Pdf;
 
 #[Route('/transaction')]
 class TransactionController extends AbstractController
@@ -24,7 +25,6 @@ class TransactionController extends AbstractController
     }
 
     #[Route('/new', name: 'app_transaction_new', methods: ['GET', 'POST'])]
-
     public function new(Request $request, EntityManagerInterface $entityManager, CompteRepository $compteRepository): Response
     
     {
@@ -68,7 +68,28 @@ class TransactionController extends AbstractController
         ]);
     
     }
-    #[Route('/{idTransaction}', name: 'app_transaction_show', methods: ['GET'])]
+    #[Route('/{idTransaction}/pdf', name: 'app_transaction_pdf', methods: ['GET'])]
+
+    public function pdf(Transaction $transaction, Pdf $pdf): Response
+
+    {
+
+        $html = $this->renderView('transaction/pdf.html.twig', [
+
+            'transaction' => $transaction,
+
+        ]);
+
+
+        $pdfFile = 'path/to/save/pdf.pdf';
+
+        $pdf->generateFromHtml($html, $pdfFile);
+
+
+        return $this->redirectToRoute('app_transaction_show', ['idTransaction' => $transaction->getId()]);
+
+    }
+   #[Route('/{idTransaction}', name: 'app_transaction_show', methods: ['GET'])]
     public function show(Transaction $transaction): Response
     {
         return $this->render('transaction/show.html.twig', [

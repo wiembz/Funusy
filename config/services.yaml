@@ -6,6 +6,11 @@
 parameters:
 
 services:
+    Knp\Snappy\Pdf:
+
+        alias: knp_snappy.pdf
+
+        public: true
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.

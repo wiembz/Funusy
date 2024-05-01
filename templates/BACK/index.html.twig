@@ -5,7 +5,104 @@
 {% block body %}
     <div id="layoutSidenav_content">
         <main>
-            <!-- Your main content -->
+            <div class="stocks-container-bg">
+                <div class="stocks-container">
+
+                    {% for stock in stocks %}
+                        <div class="stock-change">
+                            <a href="https://www.marketwatch.com/investing/stock/{{ stock.name }}">{{ stock.name }}
+                            <span class="change-percentage {% if stock.changePercentage > 0 %}positive{% elseif stock.changePercentage < 0 %}negative{% else %}neutral{% endif %}">
+
+                {% if stock.changePercentage > 0 %}&#x25B2;
+                {% elseif stock.changePercentage < 0 %}&#x25BC;
+                {% else %}&#x2013;
+                {% endif %}
+                                {{ stock.changePercentage }}%
+            </span></a>
+                        </div>
+                    {% endfor %}
+
+                </div>
+            </div>
+            <style>
+                .change-percentage {
+                     display: flex;
+                    justify-content:  right;
+                }
+
+                .stocks-container-bg {
+                    height: 60px; /* set the height of the block */
+                    background-color: #7E8BBA;
+                    display: flex; /* add display: flex */
+                    align-items: center; /* add align-items: center */
+                    overflow: clip;
+                }
+
+                .stocks-container {
+                    position: relative;
+                     display: flex;
+                    justify-content: flex-start;
+                    align-items: center;
+                    animation: scroll 24s linear infinite;
+                }
+
+                .stocks-container:hover {
+
+                    animation-play-state: paused; /* add this line */
+
+                }
+
+                .stock-change {
+                    width: 120px;
+                    margin-right: 10px;
+                    height: 50px;
+                    padding: 2px;
+                    border-radius: 7px; /* add border-radius for rounded corners */
+                    background-color: #f2f2f2; /* add a background color */
+                }
+
+                .stock-name {
+                    justify-content: left;
+                    font-weight: bold;
+                    margin-right: 10px;
+                }
+
+                .change-percentage {
+                    font-weight: bold;
+                    font-size: 14px;
+                }
+
+                .positive {
+                    color: green;
+                }
+
+                .negative {
+                    color: red;
+                }
+
+                .neutral {
+                    color: black;
+                }
+
+                @keyframes scroll {
+                    0% {
+                        transform: translateX(-10%);
+                    }
+                    100% {
+                        transform: translateX(-30%);
+
+                    }
+
+                }
+            </style>
+            <script> const stocksContainer = document.querySelector('.stocks-container');
+                stocksContainer.addEventListener('mouseover', () => {
+                    stocksContainer.style.animationPlayState = 'paused';
+                });
+                stocksContainer.addEventListener('mouseout', () => {
+                    stocksContainer.style.animationPlayState = 'running';
+                });
+            </script>
         </main>
     </div>
 {% endblock %}
