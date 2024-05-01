@@ -1,0 +1,14 @@
+{% extends 'baseF.html.twig' %}
+
+{% block title %}New Garantie{% endblock %}
+
+{% block body %}
+    <br>
+    <br>
+    <br>
+    <h1>Create new Garantie</h1>
+
+    {{ include('garantie_f/_form.html.twig') }}
+
+    <a href="{{ path('app_garantie_f_index') }}">back to list</a>
+{% endblock %}

@@ -1,0 +1,34 @@
+{# login.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+    <h1>Login</h1>
+
+    {# Display flash messages if any #}
+    {% for flash_message in app.flashes('error') %}
+        <div class="alert alert-danger" role="alert">
+            {{ flash_message }}
+        </div>
+    {% endfor %}
+
+    {# Render the login form #}
+    {{ form_start(form) }}
+    {{ form_row(form.emailUser) }}
+    {{ form_row(form.mdp) }}
+
+    {# Display CAPTCHA field if required #}
+    {% if showCaptcha %}
+        <div class="form-group">
+            <label for="captcha">CAPTCHA</label>
+            <input type="text" id="captcha" name="captcha" class="form-control" required>
+            <img src="{{ path('generate_captcha') }}" alt="CAPTCHA Image">
+            <small>Please complete the CAPTCHA to proceed.</small>
+        </div>
+    {% endif %}
+
+    <button type="submit">Login</button>
+    {{ form_end(form) }}
+{% endblock %}
