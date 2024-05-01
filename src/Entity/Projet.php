@@ -62,6 +62,39 @@ class Projet
     #[Assert\NotBlank(message: "choose a user")]
     private ?User $user;
 
+    #[ORM\OneToMany(mappedBy: 'projet', targetEntity: Investissement::class)]
+    private Collection $investissements;
+
+    public function __construct()
+{
+    $this->investissements = new ArrayCollection();
+}
+public function getInvestissements(): Collection
+{
+    return $this->investissements;
+}
+
+public function addInvestissement(Investissement $investissement): self
+{
+    if (!$this->investissements->contains($investissement)) {
+        $this->investissements[] = $investissement;
+        $investissement->setProjet($this);
+    }
+
+    return $this;
+}
+
+public function removeInvestissement(Investissement $investissement): self
+{
+    if ($this->investissements->removeElement($investissement)) {
+        // set the owning side to null (unless already changed)
+        if ($investissement->getProjet() === $this) {
+            $investissement->setProjet(null);
+        }
+    }
+
+    return $this;
+}
     public function getIdProjet(): ?int
     {
         return $this->idProjet;

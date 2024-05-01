@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Controller;
 
 use App\Entity\Projet;
@@ -12,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Form\FormError; // Include the FormError class
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 #[Route('/projet/back')]
 class ProjetBackController extends AbstractController
@@ -20,11 +22,67 @@ class ProjetBackController extends AbstractController
         public function index(ProjetRepository $projetRepository): Response
         {
             $projets = $projetRepository->findAll();
- 
+            $projectCountByType = $projetRepository->getProjectCountByType();
+            $investedProjectCount = $projetRepository->getInvestedProjectCount();
+        
             return $this->render('projet_back/index.html.twig', [
                 'projets' => $projets,
+                'projectCountByType' => $projectCountByType,
+                'investedProjectCount' => $investedProjectCount,
             ]);
         }
+        #[Route('/chart', name: 'app_projet_back_chart')]
+        public function chart(ProjetRepository $projetRepository): JsonResponse
+        {
+            $projects = $projetRepository->findAll();
+    
+            $typesCount = [];
+            foreach ($projects as $project) {
+                $type = $project->getTypeProjet();
+                if (!isset($typesCount[$type])) {
+                    $typesCount[$type] = 0;
+                }
+                $typesCount[$type]++;
+            }
+    
+            $totalProjects = count($projects);
+            $percentageData = [];
+            foreach ($typesCount as $type => $count) {
+                $percentage = ($count / $totalProjects) * 100;
+                $percentageData[] = ['name' => $type, 'y' => $percentage];
+            }
+    
+            return new JsonResponse($percentageData);
+        }
+        #[Route('/project/markers', name: 'app_projet_back_project_markers', methods: ['GET'])]
+        public function projectMarkers(ProjetRepository $projetRepository): JsonResponse
+        {
+            $projects = $projetRepository->findAll(); // Adjust this according to your logic to fetch project markers
+            $markers = [];
+    
+            foreach ($projects as $project) {
+                $markers[] = [
+                    'latitude' => $project->getLatitude(),
+                    'longitude' => $project->getLongitude(),
+                    'name' => $project->getNomProjet()
+                ];
+            }
+    
+            return $this->json($markers);
+        }
+        #[Route('/statistics', name: 'app_projet_back_project_statistics', methods: ['GET'])]
+public function projectStatistics(ProjetRepository $projetRepository): JsonResponse
+{
+    $totalProjects = $projetRepository->getTotalProjectsCount();
+    $investedProjects = $projetRepository->getInvestedProjectCount();
+    $investedProjectsByType = $projetRepository->getInvestedProjectsByType();
+
+    return new JsonResponse([
+        'totalProjects' => $totalProjects,
+        'investedProjects' => $investedProjects,
+        'investedProjectsByType' => $investedProjectsByType,
+    ]);
+}
     #[Route('/new', name: 'app_projet_back_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, ProjetRepository $projetRepository, ValidatorInterface $validator): Response
     {
@@ -96,4 +154,7 @@ class ProjetBackController extends AbstractController
 
         return $this->redirectToRoute('app_projet_back_index');
     }
+  
+    
+    
 }

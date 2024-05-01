@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class ProjetType extends AbstractType
 {
@@ -25,16 +26,9 @@ class ProjetType extends AbstractType
                 'attr' => ['placeholder' => 'Required amount'],
                 'required' => false,
             ])
-            ->add('longitude', TextType::class, [
-                'label' => 'Longitude',
-                'attr' => ['placeholder' => 'Longitude'],
-                'required' => false,
-            ])
-            ->add('latitude', TextType::class, [
-                'label' => 'Latitude',
-                'attr' => ['placeholder' => 'Latitude'],
-                'required' => false,
-            ])
+            ->add('latitude', HiddenType::class)
+            ->add('longitude', HiddenType::class)
+            
             ->add('typeProjet', ChoiceType::class, [
                 'choices' => [
                     'AGRICULTURE' => 'AGRICULTURE',
@@ -55,7 +49,14 @@ class ProjetType extends AbstractType
                 'choice_label' => 'nomUser', // Update to match the actual property of User entity
                 'placeholder' => 'Select a user', // optional
                 'required' => false,
+            ])
+            ->add('fullLocation', TextType::class, [
+                'label' => 'Full Location Name',
+                'mapped' => false, // This field is not mapped to any entity property
+                'attr' => ['readonly' => true], // Make the field read-only
+                'required' => false,
             ]);
+            
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -45,4 +45,40 @@ class ProjetRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+public function getProjectCountByType(): array
+{
+    $queryBuilder = $this->createQueryBuilder('p')
+        ->select('p.typeProjet, COUNT(p.idProjet) as projectCount')
+        ->groupBy('p.typeProjet');
+
+    return $queryBuilder->getQuery()->getResult();
 }
+//count invested project
+public function getInvestedProjectCount(): int
+{
+    $queryBuilder = $this->createQueryBuilder('p')
+        ->select('COUNT(p.idProjet)')
+        ->innerJoin('p.investissements', 'i')
+        ->groupBy('p.idProjet');
+
+    return count($queryBuilder->getQuery()->getResult());
+}
+public function getTotalProjectsCount(): int
+{
+    return $this->createQueryBuilder('p')
+        ->select('COUNT(p.idProjet)')
+        ->getQuery()
+        ->getSingleScalarResult();
+}
+
+public function getInvestedProjectsByType(): array
+{
+    $queryBuilder = $this->createQueryBuilder('p')
+        ->select('p.typeProjet, COUNT(p.idProjet) as projectCount')
+        ->innerJoin('p.investissements', 'i')
+        ->groupBy('p.typeProjet');
+
+    return $queryBuilder->getQuery()->getResult();
+}
+}  
+

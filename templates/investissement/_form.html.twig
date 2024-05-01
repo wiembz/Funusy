@@ -10,10 +10,12 @@
                 {{ form_errors(form) }}
             </div>
         {% endif %}
-
+                <h3 class="card-title">Create a new Investment</h3>
+<br>
         <div class="mb-3">
             <label class="form-label" for="basic-icon-default-nomProjet">Amount in Dt</label>
             <div class="input-group input-group-merge"><!-- Add icon if needed -->
+                        <span class="input-group-text">$</span>
                     <input
                         type="text"
                         class="form-control"
@@ -23,6 +25,8 @@
                         placeholder="{{ field_label(form.montant) }}"
                         aria-describedby="basic-icon-default-montant2"
                     />
+                     <span class="input-group-text">DT</span>
+
                 </div>
                 <div class="text-danger mt-2">{{ form_errors(form.montant) }}</div>
             </div>
@@ -30,6 +34,7 @@
             <div class="mb-3">
                 <label class="form-label" for="basic-icon-default-dateInv">Investment Date</label>
                 <div class="input-group input-group-merge">
+                 <span class="input-group-text"><i class="bx bx-calendar"></i></span>
                     <input
                         type="date"
                         class="form-control"
@@ -48,6 +53,7 @@
             <div class="mb-3">
                 <label class="form-label" for="basic-icon-default-periode">Period (months)</label>
                 <div class="input-group input-group-merge">
+                    <span class="input-group-text"><i class="bx bx-time"></i></span>
                     <input
                         type="number"
                         class="form-control"
@@ -66,16 +72,23 @@
             
             <div class="mb-3">
                 <label class="form-label" for="basic-icon-default-user">User</label>
+                <div class="input-group input-group-merge">
+                    <span class="input-group-text"><i class="bx bx-user"></i></span>
                 {{ form_widget(form.user, {'attr': {'class': 'form-control'}}) }}
+                </div>
                 <div class="text-danger mt-2">{{ form_errors(form.user) }}</div>
             </div>
             
             <div class="mb-3">
                 <label class="form-label" for="basic-icon-default-projet">Project</label>
+                <div class="input-group input-group-merge">
+                    <span class="input-group-text"><i class="bx bx-buildings"></i></span>
                 {{ form_widget(form.projet, {'attr': {'class': 'form-control'}}) }}
+                </div>
                 <div class="text-danger mt-2">{{ form_errors(form.projet) }}</div>
             </div>
-            
+            <br>
+            <div class="text-center">
             <button type="submit" class="btn btn-primary">{{ button_label|default('Send') }}</button>
             <a href="{{ path('app_investissement_index') }}" class="btn btn-secondary">Back to list</a>
     </div>
