@@ -71,24 +71,33 @@ public function getTotalProjectsCount(): int
         ->getSingleScalarResult();
 }
 
-public function getInvestedProjectsByType(): array
-{
-    $queryBuilder = $this->createQueryBuilder('p')
-        ->select('p.typeProjet, COUNT(p.idProjet) as projectCount')
-        ->innerJoin('p.investissements', 'i')
-        ->groupBy('p.typeProjet');
+// ProjetRepository.php
 
-    return $queryBuilder->getQuery()->getResult();
+public function findProjectsByType($type): array
+{
+    return $this->createQueryBuilder('p')
+        ->andWhere('p.typeProjet = :type')
+        ->setParameter('type', $type)
+        ->getQuery()
+        ->getResult();
 }
+
 //search projects
 public function searchProjects($search): array
 {
-    $queryBuilder = $this->createQueryBuilder('p')
-        ->where('p.nomProjet LIKE :search')
-        ->setParameter('search', '%'.$search.'%');
-
-    return $queryBuilder->getQuery()->getResult();
+    return $this->createQueryBuilder('p')
+    //where all fields LIKE :search'
+            ->andWhere('p.nomProjet LIKE :search')
+            ->orWhere('p.description LIKE :search')
+            ->orWhere('p.typeProjet LIKE :search')
+            ->orWhere('p.montantReq LIKE :search')
+            ->orWhere('p.longitude LIKE :search')
+            ->orWhere('p.latitude LIKE :search')
+            ->setParameter('search', '%' . $search . '%')
+            ->getQuery()
+            ->getResult();
 }
+
 
 }  
 

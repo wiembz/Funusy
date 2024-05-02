@@ -12,28 +12,36 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\QrCode;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
+
 #[Route('/projet')]
 class ProjetFrontController extends AbstractController
 {
-    
     #[Route('/f', name: 'app_projet', methods: ['GET'])]
-    public function indexFRONT(ProjetRepository $projetRepository): Response
+    public function indexFRONT(ProjetRepository $projetRepository, UrlGeneratorInterface $urlGenerator): Response
     {
         $projets = $projetRepository->findAll();
         $qrCodeUrls = [];
+        $shareUrls = [];
 
-        // Generate QR codes for each project with all project details
         foreach ($projets as $projet) {
-            // Format project details
+            // Generate share URLs for social media platforms
+            $projectUrl = $urlGenerator->generate('app_projet_detail', ['idProjet' => $projet->getIdProjet()], UrlGeneratorInterface::ABSOLUTE_URL);
+            $shareUrls[$projet->getIdProjet()] = [
+                'facebook' => 'https://www.facebook.com/sharer/sharer.php?u=' . urlencode($projectUrl),
+                'twitter' => 'https://twitter.com/intent/tweet?url=' . urlencode($projectUrl) . '&text=' . urlencode($projet->getNomProjet()),
+                // Add more social media platforms as needed
+            ];
+
+            // Generate QR codes for each project with all project details
             $details = implode('|', [
                 $projet->getIdProjet(),
                 $projet->getNomProjet(),
                 $projet->getMontantReq(),
                 $projet->getDescription(),
-                // Add more project attributes as needed
             ]);
-
-            // Create QR code with project details
             $qrCode = new QrCode($details);
             $writer = new PngWriter();
             $qrCodeUrls[$projet->getIdProjet()] = $writer->write($qrCode)->getDataUri();
@@ -42,8 +50,10 @@ class ProjetFrontController extends AbstractController
         return $this->render('projet/indexFRONT.html.twig', [
             'projets' => $projets,
             'qrCodeUrls' => $qrCodeUrls,
+            'shareUrls' => $shareUrls,
         ]);
     }
+
 
 
     #[Route('/back', name: 'app_projet_index', methods: ['GET'])]
@@ -75,6 +85,14 @@ class ProjetFrontController extends AbstractController
             'form' => $form,
         ]);
     }
+    #[Route('/{idProjet}', name: 'app_projet_detail', methods: ['GET'])]
+    public function showProjectDetails(Projet $projet): Response
+    {
+        return $this->render('projet/detail.html.twig', [
+            'projet' => $projet,
+        ]);
+    }
+    
 
     #[Route('/{idProjet}/edit', name: 'app_projet_edit', methods: ['GET', 'POST'])]
     public function editProject(Request $request, Projet $projet, EntityManagerInterface $entityManager): Response

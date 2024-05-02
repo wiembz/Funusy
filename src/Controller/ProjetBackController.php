@@ -33,19 +33,28 @@ class ProjetBackController extends AbstractController
                 'investedProjectCount' => $investedProjectCount,
             ]);
         }
+
+
         #[Route('/search', name: 'app_projet_back_search', methods: ['GET'])]
-        public function search(Request $request, ProjetRepository $projetRepository, SerializerInterface $serializer): JsonResponse
+        public function search(Request $request, projetRepository $projetRepository): Response
         {
             $query = $request->query->get('query');
-        
-            // Use the query to filter the projects
-            $filteredProjects = $projetRepository->searchProjects($query);
-        
-            // Serialize the filtered projects to JSON
-            $jsonData = $serializer->serialize($filteredProjects, 'json');
-        
-            // Return a JSON response containing the filtered projects data
-            return new JsonResponse($jsonData, Response::HTTP_OK, [], true);
+
+        if ($query) {
+            $projets = $projetRepository->searchProjects($query);
+        } else {
+            $projets = $projetRepository->findAll();
+        }
+
+        if ($request->isXmlHttpRequest()) {
+            return $this->render('projet_back/search_Project.html.twig', [
+                'projets' => $projets,
+            ]);
+        } else {
+            return $this->render('projet_back/index.html.twig', [
+                'projets' => $projets,
+            ]);
+        }
         }
         #[Route('/chart', name: 'app_projet_back_chart')]
         public function chart(ProjetRepository $projetRepository): JsonResponse
@@ -70,6 +79,25 @@ class ProjetBackController extends AbstractController
     
             return new JsonResponse($percentageData);
         }
+
+      // ProjetBackController.php
+
+#[Route('/projects/by-type', name: 'app_projet_back_projects_by_type', methods: ['GET'])]
+public function projectsByType(Request $request, ProjetRepository $projetRepository): Response
+{
+    $type = $request->query->get('type');
+
+    // Fetch projects by type using your repository or service
+    $projects = $projetRepository->findProjectsByType($type);
+
+    // Render the projects as HTML or return them as JSON, depending on your requirements
+    return $this->render('projet_back/projects_by_type.html.twig', [
+        'projectType' => $type, // Pass the project type to the template
+        'projects' => $projects,
+    ]);
+}
+
+
         #[Route('/project/markers', name: 'app_projet_back_project_markers', methods: ['GET'])]
         public function projectMarkers(ProjetRepository $projetRepository): JsonResponse
         {

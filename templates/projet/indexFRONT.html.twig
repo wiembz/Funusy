@@ -18,6 +18,41 @@
             border: 2px solid #fff; /* Add a border */
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add a shadow */
         }
+
+        /* Style for social media sharing icons */
+        .social-media-sharing {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .social-media-sharing a {
+            display: inline-block;
+            margin: 0 10px;
+            width: 40px; /* Adjust the width as needed */
+            height: 40px; /* Adjust the height as needed */
+            line-height: 40px;
+            text-align: center;
+            border-radius: 50%; /* Make it a circle */
+            color: #fff;
+            font-size: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .social-media-sharing a:hover {
+            transform: scale(1.2);
+        }
+
+        /* Add specific styles for each social media button */
+        .social-media-sharing .facebook {
+            background-color: #3b5998; /* Facebook blue */
+        }
+
+        .social-media-sharing .twitter {
+            background-color: #1da1f2; /* Twitter blue */
+        }
+
+        /* Add more social media buttons as needed */
     </style>
 {% endblock %}
 
@@ -38,7 +73,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="card-title">{{ projet.nomProjet }}</div>
-                        <div class="price"><span class="value">{{ projet.montantReq }}</span></div>
+                        <div class="price"><span class="value">{{ projet.montantReq }} DT</span></div>
                         <div class="frequency"></div>
                         <div class="divider"></div>
                         <ul class="list-unstyled li-space-lg">
@@ -46,8 +81,6 @@
                                 <i class="fas fa-check"></i>
                                 <div class="media-body">{{ projet.description }}</div>
                             </li>
-                            
-                            <!-- Add more project attributes as needed -->
                         </ul>
                         <div class="button-wrapper">
                             <a href="{{ path('app_investissement_front_new', {'projetId': projet.idProjet}) }}" class="btn btn-primary">Invest Now</a>
@@ -55,6 +88,11 @@
                         <div class="qr-code">
                             <!-- QR code image -->
                             <img src="{{ qrCodeUrls[projet.idProjet] }}" alt="QR Code for {{ projet.nomProjet }}">
+                        </div>
+                        <div class="social-media-sharing">
+                            <a href="{{ shareUrls[projet.idProjet].facebook }}" class="facebook" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                            <a href="{{ shareUrls[projet.idProjet].twitter }}" class="twitter" target="_blank"><i class="fab fa-twitter"></i></a>
+                            <!-- Add more social media sharing links as needed -->
                         </div>
                     </div>
                 </div>

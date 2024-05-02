@@ -24,6 +24,8 @@
                             <td>{{ investissement.montant }}</td>
                             <td>{{ investissement.dateInv ? investissement.dateInv|date('Y-m-d') : '' }}</td>
                             <td>{{ investissement.periode }}</td>
+                            <div class="g-recaptcha" data-sitekey="YOUR_SITE_KEY"></div>
+
                             <td>
                                 <a href="{{ path('app_investissement_front_show', {'idInvestissement': investissement.idInvestissement}) }}" class="btn btn-outline-primary btn-sm">Show</a>
                                 <a href="{{ path('app_investissement_front_edit', {'idInvestissement': investissement.idInvestissement}) }}" class="btn btn-outline-secondary btn-sm">Edit</a>
