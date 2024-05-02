@@ -1,4 +1,191 @@
+<<<<<<< HEAD
 {{ form_start(form) }}
     {{ form_widget(form) }}
     <button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
+=======
+{{ form_start(form,{'attr': {'novalidate': 'novalidate'}} ) }}
+{{ form_widget(form._token) }}
+
+<div>
+    <div >
+        <h3 class="fw-bold">Create a new User</h3>
+    </div>
+        <form>
+            <div class="mb-3 d-flex flex-column">
+                <label class="form-label" for="basic-icon-default-nomUser">Name</label>
+                <div class="input-group input-group-merge">
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="basic-icon-default-nomUser"
+                        name="{{ field_name(form.nomUser) }}"
+                        value="{{ field_value(form.nomUser) }}"
+                        placeholder="{{ field_label(form.nomUser) }}"
+                        aria-describedby="basic-icon-default-nomUser2"
+                    />
+                </div>
+                <div class="text-danger mt-2">{{ form_errors(form.nomUser) }}</div>
+            </div>
+
+            <div class="mb-3 d-flex flex-column">
+                <label class="form-label" for="basic-icon-default-prenomUser">First Name</label>
+                <div class="input-group input-group-merge">
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="basic-icon-default-prenomUser"
+                        name="{{ field_name(form.prenomUser) }}"
+                        value="{{ field_value(form.prenomUser) }}"
+                        placeholder="{{ field_label(form.prenomUser) }}"
+                        aria-describedby="basic-icon-default-prenomUser2"
+                    />
+                </div>
+                <div class="text-danger mt-2">{{ form_errors(form.prenomUser) }}</div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="basic-icon-default-emailUser">Email</label>
+                <div class="input-group input-group-merge">
+                    <input
+                        type="email"
+                        class="form-control"
+                        id="basic-icon-default-emailUser"
+                        name="{{ field_name(form.emailUser) }}"
+                        value="{{ field_value(form.emailUser) }}"
+                        placeholder="{{ field_label(form.emailUser) }}"
+                        aria-describedby="basic-icon-default-emailUser2"
+                    />
+                </div>
+                <div class="text-danger mt-2">{{ form_errors(form.emailUser) }}</div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="basic-icon-default-mdp">Password</label>
+                <div class="input-group input-group-merge">
+                    <input
+                        type="password"
+                        class="form-control"
+                        id="basic-icon-default-mdp"
+                        name="{{ field_name(form.mdp) }}"
+                        value="{{ field_value(form.mdp) }}"
+                        placeholder="{{ field_label(form.mdp) }}"
+                        aria-describedby="basic-icon-default-mdp2"
+                    />
+                </div>
+                <div class="text-danger mt-2">{{ form_errors(form.mdp) }}</div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="basic-icon-default-salaire">Salary</label>
+                <div class="input-group input-group-merge">
+                    <input
+                        type="number"
+                        class="form-control"
+                        id="basic-icon-default-salaire"
+                        name="{{ field_name(form.salaire) }}"
+                        value="{{ field_value(form.salaire) }}"
+                        placeholder="{{ field_label(form.salaire) }}"
+                        aria-describedby="basic-icon-default-salaire2"
+                        step="0.01"
+                    />
+                </div>
+                <div class="text-danger mt-2">{{ form_errors(form.salaire) }}</div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="basic-icon-default-dateNaissance">Date of Birth</label>
+                <div class="input-group input-group-merge">
+                    <input
+                        type="date"
+                        class="form-control"
+                        id="basic-icon-default-dateNaissance"
+                        name="{{ field_name(form.dateNaissance) }}"
+                        {% if field_value(form.dateNaissance) is not null %}
+                            value="{{ field_value(form.dateNaissance)|date('Y-m-d') }}"
+                        {% endif %}
+                        placeholder="{{ field_label(form.dateNaissance) }}"
+                        aria-describedby="basic-icon-default-dateNaissance2"
+                    />
+                </div>
+                <div class="text-danger mt-2">{{ form_errors(form.dateNaissance) }}</div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="basic-icon-default-cin">National ID</label>
+                <div class="input-group input-group-merge">
+                    <input
+                        type="number"
+                        class="form-control"
+                        id="basic-icon-default-cin"
+                        name="{{ field_name(form.cin) }}"
+                        value="{{ field_value(form.cin) }}"
+                        placeholder="{{ field_label(form.cin) }}"
+                        aria-describedby="basic-icon-default-cin2"
+                    />
+                </div>
+                <div class="text-danger mt-2">{{ form_errors(form.cin) }}</div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="basic-icon-default-tel">Phone Number</label>
+                <div class="input-group input-group-merge">
+                    <input
+                        type="number"
+                        class="form-control"
+                        id="basic-icon-default-tel"
+                        name="{{ field_name(form.tel) }}"
+                        value="{{ field_value(form.tel) }}"
+                        placeholder="{{ field_label(form.tel) }}"
+                        aria-describedby="basic-icon-default-tel2"
+                    />
+                </div>
+                <div class="text-danger mt-2">{{ form_errors(form.tel) }}</div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="basic-icon-default-adresseUser">Address</label>
+                {{ form_widget(form.adresseUser, {
+                    'attr': {
+                        'class': 'form-control'
+                    }
+                }) }}
+                <div class="text-danger mt-2">{{ form_errors(form.adresseUser) }}</div>
+            </div>
+            
+
+            <div class="mb-3">
+                <label class="form-label" for="basic-icon-default-roleUser">Role</label>
+                {{ form_widget(form.roleUser, {
+                    'attr': {
+                        'class': 'form-control'
+                    }
+                }) }}
+                <div class="text-danger mt-2">{{ form_errors(form.roleUser) }}</div>
+            </div>
+            
+
+           <div class="mb-3">
+               <label class="form-label" for="basic-icon-default-numericCode">Numeric Code</label>
+               <div class="input-group input-group-merge">
+                   <input
+                       type="text"
+                       class="form-control"
+                       id="basic-icon-default-numericCode"
+                       name="{{ field_name(form.numericCode) }}"
+                       value="{{ field_value(form.numericCode) }}"
+                       placeholder="{{ field_label(form.numericCode) }}"
+                       aria-describedby="basic-icon-default-numericCode2"
+                   />
+               </div>
+               <div class="text-danger mt-2">{{ form_errors(form.numericCode) }}</div>
+           </div>
+
+           <button type="submit" class="btn btn-primary">{{ button_label|default('Send') }}</button>
+           <a href="{{ path('app_user_index') }}" class="btn btn-secondary">Back to list</a>
+       </form>
+   </div>
+
+
+{{ form_end(form) }}
+>>>>>>> a18cdd6a6674efbecf899883a1a5a485e854ff57

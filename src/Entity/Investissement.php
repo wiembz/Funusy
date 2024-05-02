@@ -3,7 +3,11 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+<<<<<<< HEAD
 use App\Repository\UserRepository;
+=======
+use App\Repository\InvestissementRepository;
+>>>>>>> a18cdd6a6674efbecf899883a1a5a485e854ff57
 use Doctrine\DBAL\Types\Types;
 
 #[ORM\Entity(repositoryClass: InvestissementRepository::class)]

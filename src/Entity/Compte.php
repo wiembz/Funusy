@@ -4,9 +4,15 @@ namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+<<<<<<< HEAD
 use App\Repository\StudentRepository;
 
 #[ORM\Entity(repositoryClass: StudentRepository::class)]
+=======
+use App\Repository\CompteRepository;
+
+#[ORM\Entity(repositoryClass: CompteRepository::class)]
+>>>>>>> a18cdd6a6674efbecf899883a1a5a485e854ff57
 class Compte
 {
     // Define primary key with the 'rib' attribute

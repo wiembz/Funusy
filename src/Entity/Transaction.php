@@ -6,9 +6,15 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+<<<<<<< HEAD
 use App\Repository\StudentRepository;
 
 #[ORM\Entity(repositoryClass: StudentRepository::class)]
+=======
+use App\Repository\TransactionRepository;
+
+#[ORM\Entity(repositoryClass: TransactionRepository::class)]
+>>>>>>> a18cdd6a6674efbecf899883a1a5a485e854ff57
 class Transaction
 {
     #[ORM\Id]

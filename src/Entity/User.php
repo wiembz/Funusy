@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+<<<<<<< HEAD
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -10,12 +11,27 @@ use App\Repository\UserRepository;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 class User
+=======
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use App\Repository\UserRepository;
+use Symfony\Component\Validator\Constraints as Assert;
+
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[UniqueEntity(fields: ['emailUser'], message: 'There is already an account with this emailUser')]
+class User implements UserInterface, PasswordAuthenticatedUserInterface
+>>>>>>> a18cdd6a6674efbecf899883a1a5a485e854ff57
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(name: "id_user", type: "integer", nullable: false)]
     private ?int $id_user;
     
+<<<<<<< HEAD
 
     #[ORM\Column(name: "nom_user", type: "string", length: 255, nullable: false)]
     private string $nomUser;
@@ -45,6 +61,47 @@ class User
     private string $adresseUser;
 
     #[ORM\Column(name: "role_user", type: "string", length: 0, nullable: false)]
+=======
+    #[ORM\Column(name: "nom_user", type: "string", length: 255, nullable: false)]
+    #[Assert\NotBlank(message:'empty field !')]
+    private string $nomUser;
+
+    #[ORM\Column(name: "prenom_user", type: "string", length: 255, nullable: false)]
+    #[Assert\NotBlank(message:'empty field !')]
+    private string $prenomUser;
+
+    #[ORM\Column(name: "email_user", type: "string", length: 255, nullable: false)]
+    #[Assert\NotBlank(message:'empty field !')]
+    #[Assert\Email]
+    private string $emailUser;
+
+    #[ORM\Column(name: "mdp", type: "string", length: 255, nullable: false)]
+    #[Assert\NotBlank(message:'empty field !')]
+    private string $mdp;
+
+    #[ORM\Column(name: "salaire", type: "float", precision: 10, scale: 0, nullable: false)]
+    #[Assert\NotBlank(message:'empty field !')]
+    private float $salaire;
+
+    #[ORM\Column(name: "date_naissance", type: "date", nullable: false)]
+    #[Assert\NotBlank(message:'empty field !')]
+    private \DateTime $dateNaissance;
+
+    #[ORM\Column(name: "CIN", type: "integer", nullable: false)]
+    #[Assert\NotBlank(message:'empty field !')]
+    private int $cin;
+
+    #[ORM\Column(name: "tel", type: "integer", nullable: false)]
+    #[Assert\NotBlank(message:'empty field !')]
+    private int $tel;
+
+    #[ORM\Column(name: "adresse_user", type: "string", length: 0, nullable: false)]
+    #[Assert\NotBlank(message:'empty field !')]
+    private string $adresseUser;
+
+    #[ORM\Column(name: "role_user", type: "string", length: 0, nullable: false)]
+    #[Assert\NotBlank]
+>>>>>>> a18cdd6a6674efbecf899883a1a5a485e854ff57
     private string $roleUser;
 
     #[ORM\Column(name: "numeric_code", type: "string", length: 255, nullable: true)]
@@ -56,17 +113,24 @@ class User
     #[ORM\OneToMany(mappedBy: 'User', targetEntity: Credit::class)]
     private Collection $credits;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> a18cdd6a6674efbecf899883a1a5a485e854ff57
     public function __construct()
     {
         $this->comptes = new ArrayCollection();
         $this->credits = new ArrayCollection();
     }
 
+<<<<<<< HEAD
     public function getId(): ?int
     {
         return $this->id_user;
     }
 
+=======
+>>>>>>> a18cdd6a6674efbecf899883a1a5a485e854ff57
     public function getNomUser(): ?string
     {
         return $this->nomUser;
@@ -166,11 +230,14 @@ class User
         return $this;
     }
 
+<<<<<<< HEAD
     public function getRoleUser(): ?string
     {
         return $this->roleUser;
     }
 
+=======
+>>>>>>> a18cdd6a6674efbecf899883a1a5a485e854ff57
     public function setRoleUser(string $roleUser): static
     {
         $this->roleUser = $roleUser;
@@ -253,4 +320,45 @@ class User
         return $this->id_user;
     }
 
+<<<<<<< HEAD
+=======
+    public function getUsername(): string
+    {
+        return $this->emailUser;
+    }
+
+    public function getRoles(): array
+    {
+        return [$this->roleUser];
+    }
+
+    public function getPassword(): string
+    {
+        return $this->mdp;
+    }
+
+    public function getSalt(): ?string
+    {
+        return null;
+    }
+
+    public function eraseCredentials(): void
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->emailUser;
+    }
+
+    public function getRoleUser()
+    {
+        return $this->roleUser;
+    }
+
+  
+
+>>>>>>> a18cdd6a6674efbecf899883a1a5a485e854ff57
 }

@@ -1,13 +1,26 @@
+<<<<<<< HEAD
 {% extends 'base.html.twig' %}
+=======
+{% extends 'BACK/base.html.twig' %}
+>>>>>>> a18cdd6a6674efbecf899883a1a5a485e854ff57
 
 {% block title %}Edit User{% endblock %}
 
 {% block body %}
     <h1>Edit User</h1>
 
+<<<<<<< HEAD
     {{ include('users/_form.html.twig', {'button_label': 'Update'}) }}
 
     <a href="{{ path('app_users_index') }}">back to list</a>
 
     {{ include('users/_delete_form.html.twig') }}
 {% endblock %}
+=======
+    {{ include('user/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_user_index') }}">back to list</a>
+
+    {{ include('user/_delete_form.html.twig') }}
+{% endblock %}
+>>>>>>> a18cdd6a6674efbecf899883a1a5a485e854ff57

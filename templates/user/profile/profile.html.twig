@@ -3,8 +3,16 @@
 {% block body %}
     <h1>User Profile</h1>
 
+<<<<<<< HEAD
     <p>Welcome, {{ user.getEmailUser() }}</p>
     {# Display other user data as needed #}
 
     <a href="{{ path('app_logout') }}">Logout</a>
+=======
+    <p>Welcome, {{ user.email }}</p>
+    {# Display other user data as needed #}
+
+    <a href="{{ path('app_logout') }}">Logout</a>
+    <a href="{{ path('app_login') }}">Logout</a>
+>>>>>>> a18cdd6a6674efbecf899883a1a5a485e854ff57
 {% endblock %}

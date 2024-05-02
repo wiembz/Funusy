@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends 'base.html.twig' %}
 
 {% block title %}New User{% endblock %}
@@ -9,3 +10,18 @@
 
     <a href="{{ path('app_users_index') }}">back to list</a>
 {% endblock %}
+=======
+{% extends 'BACK/base.html.twig' %}
+{% block title %}New user{% endblock %}
+{% block body %}
+    <div class="content-wrapper">
+        <div class="container-xxl flex-grow-1 container-p-y">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    {{ include('user/_form.html.twig', {'button_label': 'Save'}) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+>>>>>>> a18cdd6a6674efbecf899883a1a5a485e854ff57

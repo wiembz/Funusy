@@ -4,10 +4,17 @@ namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+<<<<<<< HEAD
 use App\Repository\MessengerMessagesRepository;
 
 
 #[ORM\Entity(repositoryClass: MessengerMessagesRepository::class)]
+=======
+use App\Repository\MessengerRepository;
+
+
+#[ORM\Entity(repositoryClass: MessengerRepository::class)]
+>>>>>>> a18cdd6a6674efbecf899883a1a5a485e854ff57
 
 class MessengerMessages
 {

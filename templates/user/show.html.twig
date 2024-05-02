@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 {% extends 'base.html.twig' %}
+=======
+{% extends 'BACK/base.html.twig' %}
+>>>>>>> a18cdd6a6674efbecf899883a1a5a485e854ff57
 
 {% block title %}User{% endblock %}
 
@@ -9,6 +13,7 @@
         <tbody>
             <tr>
                 <th>Id_user</th>
+<<<<<<< HEAD
                 <td>{{ user.idUser }}</td>
             </tr>
             <tr>
@@ -54,13 +59,69 @@
             <tr>
                 <th>NumericCode</th>
                 <td>{{ user.numericCode }}</td>
+=======
+                <td>{{ user.getIdUser() }}</td>
+            </tr>
+            <tr>
+                <th>NomUser</th>
+                <td>{{ user.getNomUser() }}</td>
+            </tr>
+            <tr>
+                <th>PrenomUser</th>
+                <td>{{ user.getPrenomUser() }}</td>
+                </tr>
+            <tr>
+                <th>EmailUser</th>
+                <td>{{ user.getEmailUser() }}</td>
+            </tr>
+            <tr>
+                <th>Mdp</th>
+                <td>{{ user.getMdp() }}</td>
+            </tr>
+            <tr>
+                <th>Salaire</th>
+                <td>{{ user.getSalaire() }}</td>
+            </tr>
+            <tr>
+                <th>DateNaissance</th>
+                <td>{{ user.getDateNaissance() ? user.getDateNaissance()|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Cin</th>
+                <td>{{ user.getCin() }}</td>
+            </tr>
+            <tr>
+                <th>Tel</th>
+                <td>{{ user.getTel() }}</td>
+            </tr>
+            <tr>
+                <th>AdresseUser</th>
+                <td>{{ user.getAdresseUser() }}</td>
+            </tr>
+            <tr>
+                <th>RoleUser</th>
+                <td>{{ user.getRoleUser() }}</td>
+            </tr>
+            <tr>
+                <th>NumericCode</th>
+                <td>{{ user.getNumericCode() }}</td>
+>>>>>>> a18cdd6a6674efbecf899883a1a5a485e854ff57
             </tr>
         </tbody>
     </table>
 
+<<<<<<< HEAD
     <a href="{{ path('app_users_index') }}">back to list</a>
 
     <a href="{{ path('app_users_edit', {'id_user': user.id_user}) }}">edit</a>
 
     {{ include('users/_delete_form.html.twig') }}
 {% endblock %}
+=======
+    <a href="{{ path('app_user_index') }}">back to list</a>
+
+    <a href="{{ path('app_user_edit', {'id_user': user.getIdUser()}) }}">edit</a>
+
+    {{ include('user/_delete_form.html.twig') }}
+{% endblock %}
+>>>>>>> a18cdd6a6674efbecf899883a1a5a485e854ff57
