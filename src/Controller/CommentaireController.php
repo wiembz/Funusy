@@ -9,7 +9,9 @@ use App\Form\CommentaireType;
 use App\Repository\CommentaireRepository;
 use App\Service\GoogleTranslatorService;
 use App\Service\BadWordsLoader;
+use App\Service\MailerService;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,6 +22,22 @@ use Symfony\Component\Form\FormError;
 
 class CommentaireController extends AbstractController
 {
+    #[Route('/commentaire/send-mail', name: 'app_commentaire_send_mail_test', methods: ['POST'])]
+    public function sendmail(Request $request, MailerService $mailer): Response
+    {
+        $recipient = $request->request->get('recipient');
+        $subject = $request->request->get('subject');
+        $content = $request->request->get('content');
+
+        if (empty($recipient) || empty($subject) || empty($content)) {
+            return new Response('Veuillez remplir tous les champs du formulaire.', Response::HTTP_BAD_REQUEST);
+        }
+
+        $mailer->sendmail($recipient, $subject, $content);
+
+        return $this->redirectToRoute('app_commentaire_index', [], Response::HTTP_SEE_OTHER);
+    }
+
     #[Route('/front', name: 'app_commentaire', methods: ['GET'])]
     public function indexfront(CommentaireRepository $commentaireRepository): Response
     {
@@ -159,4 +177,7 @@ class CommentaireController extends AbstractController
         // Return translated comment as JSON response
         return $this->json(['translated_comment' => $translatedComment]);
     }
+
+
+
 }

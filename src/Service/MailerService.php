@@ -5,6 +5,7 @@
 namespace App\Service;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
@@ -19,7 +20,10 @@ class MailerService extends AbstractController
         $this->mailer = $mailer;
     }
 
-    public function sendEmail(string $recipient, string $subject, string $body): void
+    /**
+     * @throws TransportExceptionInterface
+     */
+    public function sendmail(string $recipient, string $subject, string $body): void
     {
         $email = (new Email())
             ->from(new Address("omaymasellami2018@gmail.com", "Funusy"))
@@ -30,6 +34,9 @@ class MailerService extends AbstractController
         $this->mailer->send($email);
     }
 
+    /**
+     * @throws TransportExceptionInterface
+     */
     public function sendTwigEmail(string $recipient, string $subject, string $template, array $context): void
     {
         $email = (new Email())

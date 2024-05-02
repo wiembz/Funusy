@@ -34,7 +34,7 @@
                         </form>
                     </td>
                     <td>
-                        <button class="btn btn-sm btn-secondary" onclick="showMailForm('{{ commentaire.idCommentaire }}')">Texting</button>
+                        <button onclick="showMailForm('{{ commentaire.idCommentaire }}')" class="btn btn-sm btn-success">Send Email</button>
                     </td>
                 </tr>
             {% else %}
@@ -46,29 +46,28 @@
         </table>
     </div>
 
-    <h2 class="mt-4">Comment Counts by Project</h2>
-    <canvas id="commentCountsChart"></canvas>
-
-    <a href="{{ path('app_commentaire_new') }}" class="btn btn-primary">Create New Comment</a>
-
     <div id="mailForm" style="display: none;">
-        <h3>Send Mail</h3>
-        <form action="{{ path('app_commentaire_send_mail') }}" method="post">
+        <form action="{{ path('app_commentaire_send_mail_test') }}" method="post">
             <div class="form-group">
-                <label for="recipient">Recipient:</label>
-                <input type="text" class="form-control" id="recipient" name="recipient">
+                <label for="recipient">Recipient</label>
+                <input type="email" class="form-control" name="recipient" placeholder="Enter recipient email">
             </div>
             <div class="form-group">
-                <label for="subject">Subject:</label>
-                <input type="text" class="form-control" id="subject" name="subject">
+                <label for="subject">Subject</label>
+                <input type="text" class="form-control" name="subject" placeholder="Enter email subject">
             </div>
             <div class="form-group">
-                <label for="content">Content:</label>
-                <textarea class="form-control" id="content" name="content"></textarea>
+                <label for="content">Content</label>
+                <textarea class="form-control" name="content" id="content" rows="3" placeholder="Enter email content"></textarea>
             </div>
             <button type="submit" class="btn btn-primary">Send</button>
         </form>
     </div>
+
+    <h2 class="mt-4">Comment Counts by Project</h2>
+    <canvas id="commentCountsChart"></canvas>
+
+    <a href="{{ path('app_commentaire_new') }}" class="btn btn-primary">Create New Comment</a>
 
     <script>
         function translateComment(commentId) {
@@ -84,6 +83,32 @@
                 }
             };
             xhr.send('comment_text=' + encodeURIComponent(commentText));
+        }
+
+        function sendMail(CommentId) {
+            try {
+                var recipient = document.getElementById('recipient').value;
+                var subject = document.getElementById('subject').value;
+                var content = document.getElementById('content').value;
+
+                var url = "{{ path('app_commentaire_send_mail_test') }}";
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    content: {
+                        recipient, subject, content
+                    },
+                    success: function (response) {
+                        alert("MAIL SENT")
+                    },
+                    error: function (xhr, status, error) {
+                        alert("FAILED")
+                    }
+                });
+            }catch (err){
+                console.log(err)
+            }
+
         }
 
         function showMailForm(commentId) {
@@ -154,6 +179,4 @@
             }
         });
     </script>
-
-
 {% endblock %}
