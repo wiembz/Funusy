@@ -76,7 +76,8 @@
     </div>
 
     <a href="{{ path('app_user_new') }}">Create new</a>
-    <a href="{{ path('stats_users') }}" class="btn btn-primary mb-3">View Role Statistics</a>
+       <a href="/statistics" class="btn btn-primary">Go to Statistics</a>
+
 {% endblock %}
 
 {% block javascripts %}
@@ -133,4 +134,11 @@
             });
         });
     </script>
+
+{% endblock %}
+{% block stat %}
+   
+    
+    {# Button to redirect to the statistics page #}
+    <a href="/statistics" class="btn btn-primary">Go to Statistics</a>
 {% endblock %}

@@ -5,14 +5,10 @@ services:
   database:
     ports:
       - "5432"
-<<<<<<< HEAD
 ###< doctrine/doctrine-bundle ###
 
 
 
-=======
-###< doctrine/doctrine-bundle ###
->>>>>>> a18cdd6a6674efbecf899883a1a5a485e854ff57
 
 ###> symfony/mailer ###
   mailer:

@@ -7,7 +7,6 @@
 
     <table class="table">
         <thead>
-<<<<<<< HEAD
         <tr>
             <th>IdCredit</th>
             <th>MontantCredit</th>
@@ -19,22 +18,10 @@
             <th>actions</th>
 
         </tr>
-=======
-            <tr>
-                <th>IdCredit</th>
-                <th>MontantCredit</th>
-                <th>DureeCredit</th>
-                <th>DateCredit</th>
-                <th>TauxCredit</th>
-                <th>Status</th>
-                <th>actions</th>
-            </tr>
->>>>>>> a18cdd6a6674efbecf899883a1a5a485e854ff57
         </thead>
         <tbody>
         {% for credit in credits %}
             <tr>
-<<<<<<< HEAD
                 <td>{{ credit.getIdCredit() }}</td>
                 <td>{{ credit.getMontantCredit() }}</td>
                 <td>{{ credit.getDureeCredit() }}</td>
@@ -45,14 +32,6 @@
 
 
 
-=======
-                <td>{{ credit.idCredit }}</td>
-                <td>{{ credit.montantCredit }}</td>
-                <td>{{ credit.dureeCredit }}</td>
-                <td>{{ credit.dateCredit ? credit.dateCredit|date('Y-m-d') : '' }}</td>
-                <td>{{ credit.tauxCredit }}</td>
-                <td>{{ credit.status }}</td>
->>>>>>> a18cdd6a6674efbecf899883a1a5a485e854ff57
                 <td>
                     <a href="{{ path('app_credit_show', {'idCredit': credit.idCredit}) }}">show</a>
                     <a href="{{ path('app_credit_edit', {'idCredit': credit.idCredit}) }}">edit</a>
@@ -67,8 +46,4 @@
     </table>
 
     <a href="{{ path('app_credit_new') }}">Create new</a>
-<<<<<<< HEAD
 {% endblock %}
-=======
-{% endblock %}
->>>>>>> a18cdd6a6674efbecf899883a1a5a485e854ff57

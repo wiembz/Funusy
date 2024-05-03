@@ -44,10 +44,7 @@ class Signup3Type extends AbstractType
                 'label' => ' ',
                 'required' => true,
             ])
-            ->add('roleUser', TextType::class, [
-                'label' => ' ',
-                'required' => true,
-            ]);
+           ;
     }
 
     public function configureOptions(OptionsResolver $resolver)

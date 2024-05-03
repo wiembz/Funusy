@@ -35,15 +35,12 @@
             "./migrations/.gitignore"
         ]
     },
-<<<<<<< HEAD
     "gregwar/captcha-bundle": {
         "version": "v2.2.0"
     },
     "knplabs/knp-paginator-bundle": {
         "version": "v6.2.0"
     },
-=======
->>>>>>> a18cdd6a6674efbecf899883a1a5a485e854ff57
     "phpunit/phpunit": {
         "version": "9.6",
         "recipe": {
@@ -126,11 +123,7 @@
         ]
     },
     "symfony/mailer": {
-<<<<<<< HEAD
         "version": "6.4",
-=======
-        "version": "6.1",
->>>>>>> a18cdd6a6674efbecf899883a1a5a485e854ff57
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
@@ -151,11 +144,7 @@
         }
     },
     "symfony/messenger": {
-<<<<<<< HEAD
         "version": "6.4",
-=======
-        "version": "6.1",
->>>>>>> a18cdd6a6674efbecf899883a1a5a485e854ff57
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
@@ -231,11 +220,7 @@
         ]
     },
     "symfony/stimulus-bundle": {
-<<<<<<< HEAD
         "version": "2.17",
-=======
-        "version": "2.16",
->>>>>>> a18cdd6a6674efbecf899883a1a5a485e854ff57
         "recipe": {
             "repo": "github.com/symfony/recipes",
             "branch": "main",
@@ -275,11 +260,7 @@
         ]
     },
     "symfony/ux-turbo": {
-<<<<<<< HEAD
         "version": "v2.17.0"
-=======
-        "version": "v2.16.0"
->>>>>>> a18cdd6a6674efbecf899883a1a5a485e854ff57
     },
     "symfony/validator": {
         "version": "6.1",
@@ -306,12 +287,6 @@
             "./config/routes/web_profiler.yaml"
         ]
     },
-<<<<<<< HEAD
-=======
-    "symfonycasts/verify-email-bundle": {
-        "version": "v1.17.0"
-    },
->>>>>>> a18cdd6a6674efbecf899883a1a5a485e854ff57
     "twig/extra-bundle": {
         "version": "v3.8.0"
     }

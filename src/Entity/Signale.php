@@ -3,19 +3,11 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-<<<<<<< HEAD
 use App\Repository\StudentRepository;
 use Doctrine\DBAL\Types\Types;
 
 
 #[ORM\Entity(repositoryClass: StudentRepository::class)]
-=======
-use App\Repository\SignaleRepository;
-use Doctrine\DBAL\Types\Types;
-
-
-#[ORM\Entity(repositoryClass: SignaleRepository::class)]
->>>>>>> a18cdd6a6674efbecf899883a1a5a485e854ff57
 class Signale
 {
     #[ORM\Id]

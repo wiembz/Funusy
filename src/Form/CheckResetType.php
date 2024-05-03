@@ -11,7 +11,7 @@ class CheckResetType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('reset_token', TextType::class, [ // Change 'code' to 'reset_token'
+            ->add('reset_token', TextType::class, [ 
                 'label' => 'Reset Token'
             ]);
     }

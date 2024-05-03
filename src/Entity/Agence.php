@@ -2,13 +2,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-<<<<<<< HEAD
 use App\Repository\StudentRepository;
 #[ORM\Entity(repositoryClass: StudentRepository::class)]
-=======
-use App\Repository\AgenceRepository;
-#[ORM\Entity(repositoryClass: AgenceRepository::class)]
->>>>>>> a18cdd6a6674efbecf899883a1a5a485e854ff57
 class Agence
 {
     #[ORM\Id]

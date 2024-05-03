@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-<<<<<<< HEAD
 use App\Form\CheckResetType;
 
 use App\Form\ChangePasswordFormType;
@@ -22,40 +21,72 @@ use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationExc
 use Gregwar\Captcha\CaptchaBuilder;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
-// Add this at the beginning of your UserController.php file
 use Symfony\Component\Form\FormError;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+use App\Form\EmailresetType;
+
 
 class UserController extends AbstractController
 {
+
     #[Route('/hello', name: 'app_hello')]
-    public function index(UserRepository $userRepository): Response
+    public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
-        return $this->render('user/index.html.twig', [
-            'users' => $userRepository->findAll(),
+        $currentPage = $request->query->getInt('page', 1);
+        $maxPerPage = $request->query->getInt('max', 10);
+    
+        $query = $entityManager->createQueryBuilder()
+            ->select('u')
+            ->from('App\Entity\User', 'u')
+            ->getQuery();
+    
+        $paginator = new Paginator($query);
+        $paginator->getQuery()
+            ->setFirstResult(($currentPage - 1) * $maxPerPage)
+            ->setMaxResults($maxPerPage);
+    
+        return $this->render('users/index.html.twig', [
+            'pagination' => $paginator,
+            'maxPerPage' => $maxPerPage,
         ]);
     }
+    
  // ResetPassword Method
-#[Route('/reset-password', name: 'reset_password')]
-public function resetPassword(Request $request, SessionInterface $session, MailerInterface $mailer): Response
-{
-    // Generate a random token
-    $randomToken = mt_rand(100000, 999999);
-
-    // Save the token in the session
-    $session->set('reset_token', $randomToken);
-
-    // Send the token to the user's email
-    $email = (new Email())
-        ->from('hamza.mbarki@esprit.tn')
-        ->to('mohamed.bsila@esprit.tn') // Get email from user input
-        ->subject('Password Reset Token')
-        ->text("Your password reset token is: $randomToken");
-
-    $mailer->send($email);
-
-    // Redirect to a route where users can input the reset token
-    return $this->redirectToRoute('check_reset');
-}
+ #[Route('/reset-password', name: 'reset_password')]
+ public function resetPassword(Request $request, SessionInterface $session, MailerInterface $mailer): Response
+ {
+     // Create an instance of your email input form
+     $form = $this->createForm(EmailresetType::class);
+ 
+     $form->handleRequest($request);
+ 
+     if ($form->isSubmitted() && $form->isValid()) {
+         // Get the email from the form submission
+         $email = $form->get('emailUser')->getData();
+ 
+         // Generate a random token
+         $randomToken = mt_rand(100000, 999999);
+ 
+         // Save the token in the session
+         $session->set('reset_token', $randomToken);
+         $session->set('emailreset', $email);
+         // Send the token to the user's email
+         $emailMessage = (new Email())
+             ->from('hamza.mbarki@esprit.tn')
+             ->to($email)
+             ->subject('Password Reset Token')
+             ->text("Your password reset token is: $randomToken");
+ 
+         $mailer->send($emailMessage);
+ 
+         // Redirect to a route where users can input the reset token
+         return $this->redirectToRoute('check_reset');
+     }
+ 
+     return $this->render('user/reset_password.html.twig', [
+         'form' => $form->createView(),
+     ]);
+ }
 
 #[Route('/checkReset', name: 'check_reset')]
 public function checkReset(Request $request, SessionInterface $session): Response
@@ -85,7 +116,7 @@ public function checkReset(Request $request, SessionInterface $session): Respons
     ]);
 }
     #[Route('/changePas', name: 'change_password')]
-    public function changePassword(Request $request, EntityManagerInterface $entityManager): Response
+    public function changePassword(Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
         $form = $this->createForm(ChangePasswordFormType::class);
         $form->handleRequest($request);
@@ -106,7 +137,10 @@ public function checkReset(Request $request, SessionInterface $session): Respons
     
             // Fetch the user with emailUser == moha@gmail.com
             $userRepository = $entityManager->getRepository(User::class);
-            $user = $userRepository->findOneBy(['emailUser' => 'mohamed.bsila@esprit.2tn']);
+            $email = $session->get('emailreset');
+            $user = $userRepository->findOneBy(['emailUser' => $email]);
+            
+       
     
             // Update the user's password
             if ($user instanceof User) {
@@ -114,7 +148,7 @@ public function checkReset(Request $request, SessionInterface $session): Respons
                 $entityManager->flush();
     
                 // Password updated successfully, redirect or render success message
-                return $this->redirectToRoute('password_changed_successfully');
+                return $this->redirectToRoute('app_home_page');
             }
     
             // Handle error, user not found
@@ -167,6 +201,7 @@ public function checkReset(Request $request, SessionInterface $session): Respons
                     return $this->redirectToRoute('app_user1'); // Redirect back to login page
                 }
             }
+            
 
             $userFormData = $form->getData();
             $user = $userRepository->findOneBy(['emailUser' => $userFormData->getEmailUser()]);
@@ -180,18 +215,15 @@ public function checkReset(Request $request, SessionInterface $session): Respons
                 $session->set('name', $user->getNomUser());
                 $session->set('role', $user->getRoleUser());
                 $session->set('email', $user->getEmailUser());
-
-                return $this->redirectToRoute('signup_step2');
+                if ($user->getRoleUser() === 'CLIENT') {
+                    return $this->redirectToRoute('app_home_page');
+                } elseif ($user->getRoleUser() === 'ADMIN') {
+                    return $this->redirectToRoute('app_testback');
+                }
             } else {
                 $failedAttempts++;
                 $session->set('failed_attempts', $failedAttempts);
 
-                if ($failedAttempts >= 3) {
-                    // Display CAPTCHA
-                    throw new CustomUserMessageAuthenticationException('Please complete the CAPTCHA.');
-                } else {
-                    $this->addFlash('error', 'Invalid email or password.');
-                }
             }
         }
 
@@ -216,6 +248,7 @@ public function checkReset(Request $request, SessionInterface $session): Respons
         }
         return false;
     }
+    
     
 
     #[Route('/generate-captcha', name: 'generate_captcha')]
@@ -325,218 +358,3 @@ public function checkReset(Request $request, SessionInterface $session): Respons
     }
    
 }
-=======
-use App\Entity\User;
-use App\Form\LoginType;
-use Symfony\Bundle\SecurityBundle\SecurityBundle;
-
-use App\Form\UserType;
-use App\Repository\UserRepository;
-use App\Security\AppAuthenticator;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use Symfony\Component\Messenger\Transport\Serialization\Serializer;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\SerializerInterface;
-
-
-#[Route('/user')]
-class UserController extends AbstractController
-{
-   // private $userAuthenticator;
-
-   // public function __construct(AppAuthenticator $userAuthenticator)
-    //{
-      //  $this->userAuthenticator = $userAuthenticator;
-    //}
-    #[Route('/f', name: 'app_user', methods: ['GET'])]
-    public function indexFRONT(UserRepository $userRepository): Response
-    {
-        return $this->render('user/indexFRONT.html.twig', [
-            'users' => $userRepository->findAll(),
-        ]);
-    }
-    #[Route('/', name: 'app_user_index', methods: ['GET'])]
-    public function indexBACK(UserRepository $userRepository): Response
-    {
-        return $this->render('user/indexBACK.html.twig', [
-            'users' => $userRepository->findAll(),
-        ]);
-    }
-
-    #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $user = new User();
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->renderForm('user/new.html.twig', [
-            'user' => $user,
-            'form' => $form,
-        ]);
-    }
-    #[Route('/signup', name: 'app_user_signup', methods: ['GET', 'POST'])]
-    public function signup(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $user = new User();
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
-    
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($user);
-            $entityManager->flush();
-    
-            // Check the user's role and redirect accordingly
-            if ($user->getRoleUser() === 'ADMIN') {
-                return $this->redirectToRoute('app_testback');
-            } elseif ($user->getRoleUser() === 'CLIENT') {
-                // Render the profile.html.twig template with the additional navigation item
-                return $this->render('user/profile/profile.html.twig', [
-                    'user' => $user,
-                    'navItems' => [
-                        'nav-item' => '<li class="nav-item"><a class="nav-link page-scroll" href="#accounts">PROFILE</a></li>',
-                    ],
-                ]);
-            }
-    
-            return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
-        }
-    
-        return $this->renderForm('user/signup/signup.html.twig', [
-            'user' => $user,
-            'form' => $form,
-        ]);
-    }
- 
-
-    #[Route('/{id_user}', name: 'app_user_show', methods: ['GET'])]
-    public function show(User $user): Response
-    {
-        return $this->render('user/show.html.twig', [
-            'user' => $user,
-        ]);
-    }
-
-    #[Route('/{id_user}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, User $user, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(UserType::class, $user);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->renderForm('user/edit.html.twig', [
-            'user' => $user,
-            'form' => $form,
-        ]);
-    }
-
-    #[Route('/delete/{id_user}', name: 'app_user_delete')]
-    public function delete($id_user, ManagerRegistry $doctrine): Response
-    {
-        $repo = $doctrine->getRepository(User::class);
-        $em = $doctrine->getManager();
-        $User = $repo->find($id_user);
-        $em->remove($User);
-        $em->flush();
-        return $this->redirectToRoute('app_user_index');
-    }
-//
-  
-#[Route("/search", name:"app_user_search",methods: ['GET'])]
-public function search(Request $request, UserRepository $userRepository): Response
-{
-    $search = $request->query->get('search');
-    $users = $userRepository->findByPartialNameOrCin($search); // Implement this method in your UserRepository
-
-    return $this->render('user/search_results.html.twig', [
-        'users' => $users,
-    ]);
-}
-
-
-
-  
-
-/*#[Route('/profile', name: 'app_profile', methods: ['GET', 'POST'])]
-public function profile(Request $request, AuthenticationUtils $auth): Response
-{
-    $user = $auth->getLastUsername();
-
-    if (!$user) {
-        throw $this->createNotFoundException('User not found.');
-    }
-
-    $form = $this->createForm(UserType::class, $user);
-    $form->handleRequest($request);
-
-    if ($form->isSubmitted() && $form->isValid()) {
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($user);
-        $entityManager->flush();
-
-        // Redirect or display a success message
-        return $this->redirectToRoute('app_profile');
-    }
-
-    return $this->render('user/profile/profile.html.twig', [
-        'user' => $user,
-        'form' => $form->createView(),
-    ]);
-}
-*/
-/**
- * @Route("/stats/users", name="stats_users")
- */
-public function userStatistics(UserRepository $userRepo)
-{
-    // Get all users
-    $users = $userRepo->findAll();
-
-    $roles = [];
-    $roleCount = [];
-
-    // Separate users based on their roles
-    foreach ($users as $user) {
-        $role = $user->getRoleUser();
-        if (!in_array($role, $roles)) {
-            $roles[] = $role;
-            $roleCount[$role] = 1;
-        } else {
-            $roleCount[$role]++;
-        }
-    }
-
-    // Encode the data for ChartJS
-    $roleLabels = json_encode(array_keys($roleCount));
-    $roleCounts = json_encode(array_values($roleCount));
-
-    return $this->render('user/user_stats.html.twig', [
-        'roleLabels' => $roleLabels,
-        'roleCounts' => $roleCounts,
-    ]);
-}
-
-}  
->>>>>>> a18cdd6a6674efbecf899883a1a5a485e854ff57

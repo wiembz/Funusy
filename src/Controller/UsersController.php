@@ -3,7 +3,8 @@
 namespace App\Controller;
 
 use App\Form\CheckResetType;
-
+use App\Form\User1Type;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Form\ChangePasswordFormType;
 use App\Entity\User;
 use App\Form\Signup1Type;
@@ -91,4 +92,19 @@ class UsersController extends AbstractController
 
         return $this->redirectToRoute('app_users_index', [], Response::HTTP_SEE_OTHER);
     }
+    public function statistics(UserRepository $userRepository): JsonResponse
+{
+    // Count admins and clients
+    $adminsCount = $userRepository->countByRole('ADMIN');
+    $clientsCount = $userRepository->countByRole('CLIENT');
+
+    // Calculate average salary by age group
+    $averageSalariesByAgeGroup = $userRepository->averageSalariesByAgeGroup();
+
+    return $this->json([
+        'admins_count' => $adminsCount,
+        'clients_count' => $clientsCount,
+        'average_salaries_by_age_group' => $averageSalariesByAgeGroup,
+    ]);
+}
 }
