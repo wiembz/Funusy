@@ -10,7 +10,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 #[Route('/transactionfront')]
 class TransactionfrontController extends AbstractController
 {
@@ -23,7 +25,7 @@ class TransactionfrontController extends AbstractController
     }
 
     #[Route('/new', name: 'app_transactionfront_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, EntityManagerInterface $entityManager,MailerInterface $mailer): Response
     {
         $transaction = new Transaction();
         $form = $this->createForm(Transaction1Type::class, $transaction);
@@ -32,7 +34,33 @@ class TransactionfrontController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($transaction);
             $entityManager->flush();
+            if ($transaction->getMontantTransaction() > 1000) {
 
+                $email = (new Email())
+
+                    ->from('bellasfarmalek450@gmail.com')
+
+                    ->to('malek.bellasfar@esprit.tn')
+
+                    ->subject('New transaction created')
+
+                    ->html('<div style="font-family: Arial, sans-serif; color: #444; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
+    <h1 style="color: #f00; font-weight: bold;">Important Transaction Alert</h1>
+    <p style="font-size: 16px; line-height: 1.5;">A new transaction exceeding the amount of 1000 has been initiated. Please review this transaction as soon as possible.</p>
+    <p style="color: #888; font-size: 14px;">Best Regards,</p>
+    <p style="color: #888; font-size: 14px;">Funusy Admin Team</p>
+     <a href="funusy.com">
+    <img src="https://i.ibb.co/bLt0jV1/Asset-1-1.png" alt="Asset-1-1" border="0" width="50"  />
+</a>
+
+
+</div>
+');
+
+
+                $mailer->send($email);
+
+            }
             return $this->redirectToRoute('app_transactionfront_index', [], Response::HTTP_SEE_OTHER);
         }
 

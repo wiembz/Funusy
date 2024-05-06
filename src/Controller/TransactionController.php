@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Repository\CompteRepository;
 use Knp\Snappy\Pdf;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 #[Route('/transaction')]
 class TransactionController extends AbstractController
@@ -69,25 +70,30 @@ class TransactionController extends AbstractController
     
     }
     #[Route('/{idTransaction}/pdf', name: 'app_transaction_pdf', methods: ['GET'])]
-
     public function pdf(Transaction $transaction, Pdf $pdf): Response
-
     {
-
         $html = $this->renderView('transaction/pdf.html.twig', [
-
             'transaction' => $transaction,
-
         ]);
 
-
         $pdfFile = 'path/to/save/pdf.pdf';
+        if (file_exists($pdfFile)) {
+            unlink($pdfFile);
+        }
 
+        // Use wkhtmltopdf instead of wkhtmltoimage
+        $pdf->setBinary('wkhtmltopdf.exe');
         $pdf->generateFromHtml($html, $pdfFile);
 
+        $response = new StreamedResponse(function () use ($pdfFile) {
+            readfile($pdfFile);
+        });
 
-        return $this->redirectToRoute('app_transaction_show', ['idTransaction' => $transaction->getId()]);
+        // Set the Content-Type and Content-Disposition headers
+        $response->headers->set('Content-Type', 'application/pdf');
+        $response->headers->set('Content-Disposition', 'inline; filename="' . basename($pdfFile) . '"');
 
+        return $response;
     }
    #[Route('/{idTransaction}', name: 'app_transaction_show', methods: ['GET'])]
     public function show(Transaction $transaction): Response

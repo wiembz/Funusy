@@ -26,7 +26,6 @@
                 <td>{{ transaction.typeTransaction }}</td>
                 <td>
                     <a href="{{ path('app_transactionfront_show', {'idTransaction': transaction.idTransaction}) }}">show</a>
-                    <a href="{{ path('app_transactionfront_edit', {'idTransaction': transaction.idTransaction}) }}">edit</a>
                 </td>
             </tr>
         {% else %}

@@ -4,12 +4,8 @@ knp_snappy:
 
     enabled:    true
 
-    binary:     '%kernel.project_dir%/vendor/h4cc/wkhtmltopdf-i386/bin/wkhtmltopdf.exe'
+    binary:     'wkhtmltoimage.exe'
 
     options:
 
-      no-outline: true
-
-      page-size: A4
-
-      encoding: UTF-8
+      enable-local-file-access: true
