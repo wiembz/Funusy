@@ -10,11 +10,10 @@ use App\Repository\CarteBancairetRepository;
 class CarteBancaire
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: "IDENTITY")]
-    #[ORM\Column(name: "num_carte", type: "string", length: 16, nullable: false)]
+    #[ORM\Column(name: "num_carte", type: "string", length: 19, nullable: false)]
     private string $numCarte;
 
-    #[ORM\Column(name: "date_exp", type: "date", nullable: false)]
+    #[ORM\Column(name: "date_exp", type: "date", nullable: true)]
     private \DateTimeInterface $dateExp;
 
     #[ORM\Column(name: "code", type: "integer", nullable: false)]
@@ -23,9 +22,24 @@ class CarteBancaire
     #[ORM\Column(name: "CVV2", type: "integer", nullable: false)]
     private int $cvv2;
 
-    #[ORM\ManyToOne(targetEntity: "Compte")]
-    #[ORM\JoinColumn(name: "rib_id", referencedColumnName: "rib", onDelete: "CASCADE", unique: true)]
-    private ?Compte $rib;
+    
+
+    #[ORM\Column(name: "rib", type: "string", length: 20, nullable: false)]
+
+    private ?string $rib;
+    
+    public function setRib(?string $rib): void
+    {
+        $this->rib = $rib;
+    
+        
+    }
+    public function getRib(): ?string
+    {
+        return $this->rib;
+    }
+    
+
 
     public function getNumCarte(): ?string
     {
@@ -68,15 +82,16 @@ class CarteBancaire
         return $this;
     }
 
-    public function getRib(): ?Compte
+   
+    
+   
+    public function setNumCarte(string $numCarte): static
     {
-        return $this->rib;
-    }
-
-    public function setRib(?Compte $rib): static
-    {
-        $this->rib = $rib;
+        $this->numCarte = $numCarte;
 
         return $this;
     }
+
+    
+  
 }

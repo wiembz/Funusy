@@ -1,8 +1,6 @@
 <?php
 
 namespace App\Entity;
-
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CompteRepository;
 
@@ -11,9 +9,9 @@ class Compte
 {
     // Define primary key with the 'rib' attribute
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: "IDENTITY")]
     #[ORM\Column(name: "rib", type: "string", length: 20, nullable: false)]
     private string $rib;
+    
 
     // Define 'solde' attribute representing the balance of the account
     #[ORM\Column(name: "solde", type: "float", precision: 10, scale: 0, nullable: false)]
@@ -32,11 +30,17 @@ class Compte
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: "id_user", referencedColumnName: "id_user")]
-    private ?User $user;
+    private ?User $User;  
 
+    #[ ORM\OneToMany(targetEntity:CarteBancaire::class, mappedBy:"rib")]
+  private $cartesBancaires;
+    
+    public function setRib(string $rib): static
+{
+    $this->rib = $rib;
 
-
-    // Getters and setters for each attribute
+    return $this;
+}
 
     public function getRib(): ?string
     {
@@ -78,23 +82,36 @@ class Compte
 
     public function getIdUser(): ?int
     {
-        return $this->idUser;
+        return $this->id_user;
     }
 
     public function setIdUser(?int $idUser): static
     {
-        $this->idUser = $idUser;
+        $this->id_user = $idUser;
         return $this;
     }
 
     public function getUser(): ?User
     {
-        return $this->user;
+        return $this->User;
     }
-
     public function setUser(?User $user): static
     {
-        $this->user = $user;
+        $this->User = $user; 
         return $this;
     }
+    public function getCartesBancaires()
+    {
+        return $this->cartesBancaires;
+    }
+    public function __construct()
+    {
+        // Initialize the id_user property here
+        $this->id_user = null; // Or set it to a default value if appropriate
+    }
+    public function __toString(): string
+    {
+        return $this->getRib(); 
+    }
+
 }

@@ -45,4 +45,14 @@ class CreditRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+    public function findByPartialStatus($partialStatus)
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.status LIKE :partialStatus')
+            ->setParameter('partialStatus', '%' . $partialStatus . '%')
+            ->getQuery()
+            ->getResult();
+    }
+
+
 }

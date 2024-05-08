@@ -3,38 +3,98 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 use App\Repository\ProjetRepository;
+use DateTime;
+use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: ProjetRepository::class)]
+ 
 class Projet
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: "IDENTITY")]
-    #[ORM\Column(name: "id_projet", type: "integer", nullable: false)]
-    private ?int $idProjet;
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $idProjet = null;
 
     #[ORM\Column(name: "nom_projet", type: "string", length: 255, nullable: false)]
-    private string $nomProjet;
+    #[Assert\NotBlank(message: "Project name cannot be blank")]
+    #[Assert\Length(
+        min: 2,
+        max: 255,
+        minMessage: "Project name must be at least {{ limit }} characters long",
+        maxMessage: "Project name cannot be longer than {{ limit }} characters"
+    )]
+    #[Assert\Regex(pattern: '/^[a-zA-Z0-9_]+$/', message: ' nom projet ne doit contenir que des lettres, des chiffres et des tirets')]
+    #[Assert\Type('string', message: ' nom projet doit être une chaîne de caractères')]
+    private ?string $nomProjet = null;
 
-    #[ORM\Column(name: "montant_req", type: "float", precision: 10, scale: 0, nullable: false)]
-    private float $montantReq;
+    #[ORM\Column]
+    #[Assert\NotBlank(message: 'Le montant ne doit pas être vide')]
+    #[Assert\Type('float', message: 'Le montant doit être un nombre')]
+    #[Assert\Positive(message: 'Le montant doit être un nombre positif')]
+    private ?float $montantReq = null;
 
     #[ORM\Column(name: "longitude", type: "string", length: 255, nullable: false)]
-    private string $longitude;
+    #[Assert\NotBlank(message: "Longitude cannot be blank")]
+    private ?string $longitude;
 
     #[ORM\Column(name: "latitude", type: "string", length: 255, nullable: false)]
-    private string $latitude;
+    #[Assert\NotBlank(message: "Latitude cannot be blank")]
+    private ?string $latitude;
 
-    #[ORM\Column(name: "type_projet", type: "string", length: 0, nullable: false)]
-    private string $typeProjet;
+    #[ORM\Column(name: "type_projet", type: "string", length: 255, nullable: false)]
+    #[Assert\NotBlank(message: "Project type cannot be blank")]
+    private ?string $typeProjet;
 
-    #[ORM\Column(name: "description", type: "string", length: 250, nullable: false)]
-    private string $description;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'La description ne doit pas être vide')]
+    #[Assert\Length(min: 3, max: 255, minMessage: 'La description doit contenir au moins 3 caractères', maxMessage: 'La description doit contenir au maximum 255 caractères')]
+    #[Assert\Type('string', message: 'La description doit être une chaîne de caractères')]
+    #[Assert\Regex(pattern: '/^[a-zA-Z0-9_]+$/', message: 'La description ne doit contenir que des lettres, des chiffres et des tirets')]
+    private ?string $description;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: "id_user", referencedColumnName: "id_user")] // Assuming the column name in User entity is id_user
+    #[Assert\NotBlank(message: "choose a user")]
     private ?User $user;
 
+    #[ORM\OneToMany(mappedBy: 'projet', targetEntity: Investissement::class)]
+    private Collection $investissements;
+
+    public function __construct()
+{
+    $this->investissements = new ArrayCollection();
+}
+public function getInvestissements(): Collection
+{
+    return $this->investissements;
+}
+
+public function addInvestissement(Investissement $investissement): self
+{
+    if (!$this->investissements->contains($investissement)) {
+        $this->investissements[] = $investissement;
+        $investissement->setProjet($this);
+    }
+
+    return $this;
+}
+
+public function removeInvestissement(Investissement $investissement): self
+{
+    if ($this->investissements->removeElement($investissement)) {
+        // set the owning side to null (unless already changed)
+        if ($investissement->getProjet() === $this) {
+            $investissement->setProjet(null);
+        }
+    }
+
+    return $this;
+}
     public function getIdProjet(): ?int
     {
         return $this->idProjet;
@@ -116,4 +176,7 @@ class Projet
         $this->user = $user;
         return $this;
     }
+
+
+
 }

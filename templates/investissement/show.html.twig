@@ -3,7 +3,11 @@
 {% block title %}Investissement{% endblock %}
 
 {% block body %}
-    <h1>Investissement</h1>
+      <div class="content-wrapper">
+        <div class="container-xxl flex-grow-1 container-p-y">
+            <div class="card">
+                <h5 class="card-header">Investment </h5>
+                <div class="table-responsive text-nowrap">
 
     <table class="table">
         <tbody>
@@ -24,19 +28,23 @@
                 <td>{{ investissement.periode }}</td>
             </tr>
             <tr>
-                <th>IdUser</th>
-                <td>{{ investissement.idUser }}</td>
+                <th>User</th>
+                <td>{{ investissement.user.nomUser }}</td>
             </tr>
             <tr>
-                <th>IdProjet</th>
-                <td>{{ investissement.idProjet }}</td>
+                <th>Projet</th>
+                <td>{{ investissement.projet.nomProjet }}</td>
             </tr>
         </tbody>
     </table>
+        <div class="container-xxl flex-grow-1 container-p-y">
 
-    <a href="{{ path('app_investissement_index') }}">back to list</a>
+    <a href="{{ path('app_investissement_index') }}" class="btn btn-secondary">Back to list</a>
 
-    <a href="{{ path('app_investissement_edit', {'idInvestissement': investissement.idInvestissement}) }}">edit</a>
+    <a href="{{ path('app_investissement_edit', {'idInvestissement': investissement.idInvestissement}) }}" class="btn btn-primary">Edit</a>
+         <br>
+    <a>{{ include('investissement/_delete_form.html.twig') }}</a>
+</div>
 
-    {{ include('investissement/_delete_form.html.twig') }}
+        </div>
 {% endblock %}

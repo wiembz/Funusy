@@ -11,7 +11,7 @@ use App\Repository\TransactionRepository;
 #[ORM\Entity(repositoryClass: TransactionRepository::class)]
 class Transaction
 {
-    #[ORM\Id]
+     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: "IDENTITY")]
     #[ORM\Column(name: "id_transaction", type: "integer", nullable: false)]
     private ?int $idTransaction;
@@ -25,7 +25,7 @@ class Transaction
     #[ORM\Column(name: "destination", type: "string", length: 20, nullable: false)]
     private string $destination;
 
-    #[ORM\Column(name: "type_transaction", type: "string", length: 0, nullable: true)]
+    #[ORM\Column(name: "type_transaction", type: "string", length: 20, nullable: false)]
     private ?string $typeTransaction;
 
     #[ORM\ManyToOne(targetEntity: Compte::class)]
@@ -84,11 +84,25 @@ class Transaction
     public function getRib(): ?Compte
     {
         return $this->rib;
+        
     }
 
     public function setRib(?Compte $rib): static
     {
         $this->rib = $rib;
         return $this;
+    }
+    
+    public function __construct()
+
+    {
+
+        $this->dateTransaction = new \DateTime();
+
+        $compte = new Compte();
+
+         
+ 
+
     }
 }

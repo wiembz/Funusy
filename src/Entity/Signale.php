@@ -5,6 +5,9 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\SignaleRepository;
 use Doctrine\DBAL\Types\Types;
+use DateTimeInterface;
+use DateTime;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 
 #[ORM\Entity(repositoryClass: SignaleRepository::class)]
@@ -16,14 +19,11 @@ class Signale
     private ?int $idSignal;
 
     #[ORM\Column(name: "date_signal", type: "date", nullable: false)]
-    private \DateTime $dateSignal;
+    private ?DateTimeInterface $dateSignal;
 
-    #[ORM\Column(name: "description", type: "string", length: 255, nullable: false)]
-    private string $description;
-
-    #[ORM\Column(name: "etat_signal", type: "boolean", nullable: false)]
-    private bool $etatSignal;
-
+    #[ORM\Column(name: "description", type: "string", length: 255, nullable: true)]
+    #[Assert\NotBlank(message: " Description comment cannot be blank")]
+    private ?string $description = null;
     #[ORM\ManyToOne(targetEntity: Commentaire::class)]
     #[ORM\JoinColumn(name: "id_commentaire", referencedColumnName: "id_commentaire")]
     private ?Commentaire $idCommentaire;
@@ -49,16 +49,14 @@ class Signale
         return $this->description;
     }
 
-    public function setDescription(string $description): static
+    public function setDescription(?string $description): static
     {
-        $this->description = $description;
+        if ($description !== null) {
+            $this->description = $description;
+        }
         return $this;
     }
 
-    public function isEtatSignal(): ?bool
-    {
-        return $this->etatSignal;
-    }
 
     public function setEtatSignal(bool $etatSignal): static
     {
@@ -75,5 +73,10 @@ class Signale
     {
         $this->idCommentaire = $idCommentaire;
         return $this;
+    }
+    public function __construct()
+    {
+        // Initialisation facultative de la propriété description
+        $this->description = '';
     }
 }

@@ -3,10 +3,14 @@
 {% block title %}Compte index{% endblock %}
 
 {% block body %}
-    <h1>Compte index</h1>
-
-    <table class="table">
-        <thead>
+   <br><br><br><h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Compte index</h3>
+    <div class="content-wrapper">
+        <div class="container-xxl flex-grow-1 container-p-y">
+            <div class="card">
+                
+                <div class="table-responsive text-nowrap">
+                    <table class="table table-striped">
+                        <thead>
             <tr>
                 <th>Rib</th>
                 <th>Solde</th>
@@ -19,23 +23,33 @@
         <tbody>
         {% for compte in comptes %}
             <tr>
-                <td>{{ compte.rib }}</td>
-                <td>{{ compte.solde }}</td>
-                <td>{{ compte.dateOuverture ? compte.dateOuverture|date('Y-m-d') : '' }}</td>
-                <td>{{ compte.typeCompte }}</td>
-                <td>{{ compte.idUser }}</td>
+                <td>{{ compte.getRib() }}</td>
+                <td>{{ compte.getSolde() }}</td>
+                <td>{{ compte.getDateOuverture() ? compte.getDateOuverture()|date('Y-m-d') : '' }}</td>
+                <td>{{ compte.getTypeCompte() }}</td>
+                <td>{{ compte.getIdUser()}}</td>
                 <td>
                     <a href="{{ path('app_compte_show', {'rib': compte.rib}) }}">show</a>
                     <a href="{{ path('app_compte_edit', {'rib': compte.rib}) }}">edit</a>
+                    <form action="{{ path('app_compte_delete', {'rib': compte.rib}) }}" method="post" style="display: inline-block;">
+                       &nbsp; <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ compte.rib) }}">
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
                 </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="6">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_compte_new') }}">Create new</a>
-{% endblock %}
+                
+                                                </tr>
+                                            {% else %}
+                                                <tr>
+                                                    <td colspan="8">No records found</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <br>
+                            <a href="{{ path('app_compte_new') }}" class="btn btn-success">Create new</a>
+                        </div>
+                    </div>
+                {% endblock %}

@@ -10,17 +10,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Constraints\Callback;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+use Symfony\Component\Form\FormError;
 
 #[Route('/signale')]
 class SignaleController extends AbstractController
 {
-    #[Route('/f', name: 'app_signale', methods: ['GET'])]
-    public function indexFRONT(SignaleRepository $signaleRepository): Response
-    {
-        return $this->render('signale/indexFRONT.html.twig', [
-            'signales' => $signaleRepository->findAll(),
-        ]);
-    }
+
     #[Route('/', name: 'app_signale_index', methods: ['GET'])]
     public function indexBACK(SignaleRepository $signaleRepository): Response
     {
@@ -85,4 +82,5 @@ class SignaleController extends AbstractController
 
         return $this->redirectToRoute('app_signale_index', [], Response::HTTP_SEE_OTHER);
     }
+
 }

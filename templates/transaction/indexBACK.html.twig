@@ -3,14 +3,14 @@
 {% block title %}Transaction index{% endblock %}
 
 {% block body %}
-    <h1>Transaction index</h1>
+    <h1>Transactions effectuées </h1>
 
     <table class="table">
         <thead>
             <tr>
-                <th>IdTransaction</th>
-                <th>MontantTransaction</th>
-                <th>DateTransaction</th>
+                <th>Id</th>
+                <th>Montant</th>
+                <th>Date</th>
                 <th>Destination</th>
                 <th>TypeTransaction</th>
                 <th>actions</th>
@@ -26,7 +26,7 @@
                 <td>{{ transaction.typeTransaction }}</td>
                 <td>
                     <a href="{{ path('app_transaction_show', {'idTransaction': transaction.idTransaction}) }}">show</a>
-                    <a href="{{ path('app_transaction_edit', {'idTransaction': transaction.idTransaction}) }}">edit</a>
+                   {# <a href="{{ path('app_transaction_edit', {'idTransaction': transaction.idTransaction}) }}">edit</a>#}
                 </td>
             </tr>
         {% else %}

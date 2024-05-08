@@ -1,20 +1,40 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
+{% extends 'baseF.html.twig' %}
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}
-        {% endblock %}
-    </body>
-</html>
+{% block title %}Commentaire index{% endblock %}
+
+{% block body %}
+    <h1 class="mb-4">Commentaires</h1>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Content</th>
+                <th scope="col">Date</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for commentaire in commentaires %}
+                <tr>
+                    <td>{{ commentaire.idCommentaire }}</td>
+                    <td>{{ commentaire.contenue }}</td>
+                    <td>{{ commentaire.dateCommentaire ? commentaire.dateCommentaire|date('Y-m-d') : '' }}</td>
+                    <td>
+                        <a href="{{ path('app_commentaire_f_show', {'idCommentaire': commentaire.idCommentaire}) }}" class="btn btn-sm btn-info">Show</a>
+                        <a href="{{ path('app_commentaire_f_edit', {'idCommentaire': commentaire.idCommentaire}) }}" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="{{ path('app_signale_front_new', {'idCommentaire': commentaire.idCommentaire}) }}" class="btn btn-sm btn-danger">Signal</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4">No records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <a href="{{ path('app_commentaire_f_new') }}" class="btn btn-primary">Create New Comment</a>
+{% endblock %}

@@ -3,8 +3,13 @@
 namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Mapping as ORM;
 use App\Repository\CreditRepository;
+use DateTime;
+use DateTimeInterface;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CreditRepository::class)]
 class Credit
@@ -14,26 +19,39 @@ class Credit
     #[ORM\Column(name: "id_credit", type: "integer", nullable: false)]
     private ?int $idCredit;
 
-    #[ORM\Column(name: "montant_credit", type: "float", precision: 10, scale: 0, nullable: false)]
-    private float $montantCredit;
+    #[ORM\Column]
+    #[Assert\NotBlank(message: 'Le montant du crédit est obligatoire')]
+    #[Assert\Type(type: 'float', message: 'Le montant du crédit doit être un nombre')]
+    #[Assert\Positive(message: 'Le montant du crédit doit être positif')]
+    private ?float $montantCredit;
 
     #[ORM\Column(name: "duree_credit", type: "integer", nullable: false)]
-    private int $dureeCredit;
+    #[Assert\NotBlank(message: 'La durée du crédit est obligatoire')]
+    #[Assert\Positive(message: 'La durée du crédit doit être positive')]
+    private ?int $dureeCredit;
 
     #[ORM\Column(name: "date_credit", type: "date", nullable: false)]
-    private \DateTimeInterface $dateCredit;
+    #[Assert\NotBlank(message: 'La date du crédit est obligatoire')]
+    private ?DateTimeInterface $dateCredit;
 
     #[ORM\Column(name: "taux_credit", type: "float", precision: 10, scale: 0, nullable: false)]
-    private float $tauxCredit;
+    #[Assert\NotBlank(message: 'Le taux du crédit est obligatoire')]
+    #[Assert\Positive(message: 'Le taux du crédit doit être positif')]
+    private ?float $tauxCredit;
 
     #[ORM\Column(name: "status", type: "string", length: 255, nullable: true, options: ["default" => "Non traité"])]
+    #[Assert\Choice(choices: ['Accepted', 'Rejected', 'Non traité'], message: 'Le statut doit être parmi les valeurs proposées')]
     private ?string $status = 'Non traité';
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class)
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: "id_user", referencedColumnName: "id_user")]
+    #[Assert\NotBlank(message: 'L\'utilisateur est obligatoire')]
     private ?User $user;
+
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\Garantie", mappedBy="credit", cascade={"persist", "remove"})
+     */
+    private $garantie;
 
     public function getIdCredit(): ?int
     {
@@ -104,5 +122,50 @@ class Credit
     {
         $this->user = $user;
         return $this;
+    }
+
+    /**
+     * Get the value of garantie
+     */
+    public function getGarantie()
+    {
+        return $this->garantie;
+    }
+
+    /**
+     * Set the value of garantie
+     *
+     * @return  self
+     */
+    public function setGarantie($garantie)
+    {
+        $this->garantie = $garantie;
+
+        // Lier la garantie à ce crédit
+        if ($garantie !== null) {
+            $garantie->setCredit($this);
+        }
+
+        return $this;
+    }
+
+    public function __toString()
+    {
+        return sprintf(
+            'Credit #%d - Montant: %s, Durée: %d, Date: %s, Taux: %s, Statut: %s, Utilisateur: %s',
+            $this->idCredit,
+            $this->montantCredit,
+            $this->dureeCredit,
+            $this->dateCredit->format('d-m-Y'),
+            $this->tauxCredit,
+            $this->status,
+            $this->user ? $this->user->getNomUser() : 'Aucun utilisateur'
+        );
+    }
+
+    public function __construct()
+    {
+        $this->dateCredit = new DateTime(); // Initialise dateCredit avec la date locale actuelle
+        $this->status = 'Non traité';
     }
 }

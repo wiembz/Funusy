@@ -45,7 +45,7 @@ class User
     private string $adresseUser;
 
     #[ORM\Column(name: "role_user", type: "string", length: 0, nullable: false)]
-    private string $roleUser;
+    private string $roleUser='CLIENT';
 
     #[ORM\Column(name: "numeric_code", type: "string", length: 255, nullable: true)]
     private ?string $numericCode;
@@ -64,7 +64,7 @@ class User
 
     public function getId(): ?int
     {
-        return $this->id;
+        return $this->id_user;
     }
 
     public function getNomUser(): ?string
@@ -252,4 +252,5 @@ class User
     {
         return $this->id_user;
     }
+
 }

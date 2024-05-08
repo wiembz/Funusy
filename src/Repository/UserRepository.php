@@ -45,4 +45,46 @@ class UserRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+public function countByRole(string $role): int
+{
+    return $this->createQueryBuilder('u')
+        ->select('COUNT(u.id)')
+        ->andWhere('u.roleUser = :role')
+        ->setParameter('role', $role)
+        ->getQuery()
+        ->getSingleScalarResult();
+}
+// UserRepository.php
+
+public function averageSalariesByAgeGroup(): array
+{
+    // Define age brackets
+    $ageBrackets = [
+        '<20' => ['min' => 0, 'max' => 20],
+        '20-30' => ['min' => 20, 'max' => 30],
+        '31-40' => ['min' => 31, 'max' => 40],
+        '41-50' => ['min' => 41, 'max' => 50],
+        '>50' => ['min' => 51, 'max' => null],
+    ];
+
+    // Initialize array to store average salaries by age group
+    $averageSalariesByAgeGroup = [];
+
+    // Query to calculate average salary by age group
+    foreach ($ageBrackets as $ageGroup => $ageRange) {
+        $averageSalary = $this->createQueryBuilder('u')
+            ->select('AVG(u.salaire) AS average_salary')
+            ->andWhere('YEAR(CURRENT_DATE()) - YEAR(u.dateNaissance) BETWEEN :minAge AND :maxAge')
+            ->setParameter('minAge', $ageRange['min'])
+            ->setParameter('maxAge', $ageRange['max'])
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        // Store average salary for the age group
+        $averageSalariesByAgeGroup[] = ['age_group' => $ageGroup, 'average_salary' => (float) $averageSalary];
+    }
+
+    return $averageSalariesByAgeGroup;
+}
+
 }

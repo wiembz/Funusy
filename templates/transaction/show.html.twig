@@ -31,8 +31,9 @@
     </table>
 
     <a href="{{ path('app_transaction_index') }}">back to list</a>
+    <a href="{{ path('app_transaction_pdf', {'idTransaction': transaction.idTransaction}) }}">Generate PDF</a>
+git     add .
+    {#  <a href="{{ path('app_transaction_show', {'idTransaction': transaction.idTransaction}) }}">show</a>
 
-    <a href="{{ path('app_transaction_edit', {'idTransaction': transaction.idTransaction}) }}">edit</a>
-
-    {{ include('transaction/_delete_form.html.twig') }}
+    {{ include('transaction/_delete_form.html.twig') }}#}
 {% endblock %}
