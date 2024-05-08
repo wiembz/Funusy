@@ -1,0 +1,58 @@
+{% extends 'BACK/base.html.twig' %}
+
+{% block title %}User index{% endblock %}
+
+
+{% block body %}
+{% extends 'base.html.twig' %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 offset-md-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="text-center">My Profile</h3>
+                    </div>
+                    <div class="card-body">
+                        <dl class="row">
+                            <dt class="col-sm-4">First Name:</dt>
+                            <dd class="col-sm-8">{{ user.getNomUser() }}</dd>
+
+                            <dt class="col-sm-4">Last Name:</dt>
+                            <dd class="col-sm-8">{{ user.getPrenomUser() }}</dd>
+
+                            <dt class="col-sm-4">Email:</dt>
+                            <dd class="col-sm-8">{{ user.getEmailUser() }}</dd>
+
+                            <dt class="col-sm-4">Date of Birth:</dt>
+                            <dd class="col-sm-8">{{ user.getDateNaissance()|date('Y-m-d') }}</dd>
+
+                            <dt class="col-sm-4">CIN:</dt>
+                            <dd class="col-sm-8">{{ user.getCin() }}</dd>
+
+                            <dt class="col-sm-4">Telephone:</dt>
+                            <dd class="col-sm-8">{{ user.getTel() }}</dd>
+
+                            <dt class="col-sm-4">Address:</dt>
+                            <dd class="col-sm-8">{{ user.getAdresseUser() }}</dd>
+
+                            <dt class="col-sm-4">Role:</dt>
+                            <dd class="col-sm-8">{{ user.getRoleUser() }}</dd>
+
+                            <dt class="col-sm-4">Salary:</dt>
+                            <dd class="col-sm-8">{{ user.getSalaire() }} DT</dd>
+                        </dl>
+                    </div>
+                    <div class="card-footer text-center">
+                        <a href="{{ path('app_users_edit', {'id_user': user.getIdUser()}) }}" class="btn btn-primary">Edit Profile</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% endblock %}

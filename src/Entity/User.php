@@ -50,11 +50,13 @@ class User
     #[ORM\Column(name: "numeric_code", type: "string", length: 255, nullable: true)]
     private ?string $numericCode;
 
-    #[ORM\OneToMany(mappedBy: 'User', targetEntity: Compte::class)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Compte::class)]
     private Collection $comptes;
-
-    #[ORM\OneToMany(mappedBy: 'User', targetEntity: Credit::class)]
+    
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Credit::class)]
     private Collection $credits;
+    
+
 
     public function __construct()
     {
