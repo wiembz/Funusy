@@ -2,6 +2,9 @@
 
 {% block title %}User index{% endblock %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/user_index.css') }}">
+{% endblock %}
 
 {% block body %}
     <style>
@@ -16,10 +19,7 @@
             text-align: center; /* Center align content */
         }
 
-        .user-table th {
-            background-color: #4287f5; /* Changed background color for table header */
-            color: #fff; /* Changed text color for table header */
-        }
+
 
         .user-table tr:nth-child(even) {
             background-color: #f2f2f2;
@@ -108,10 +108,12 @@
                 <th>RoleUser</th>
                 <th>NumericCode</th>
                 <th>Actions</th>
+                <th>Actions</th>
+                  <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            {% for user in pagination %}
+            {% for user in users %}
                 <tr>
                     <td>{{ user.idUser }}</td>
                     <td>{{ user.nomUser }}</td>
@@ -127,7 +129,12 @@
                     <td>{{ user.numericCode }}</td>
                     <td>
                         <a href="{{ path('app_users_show', {'id_user': user.id}) }}" class="btn1 btn1-show">Show</a>
+                          </td>
+                         <td>
                         <a href="{{ path('app_users_edit', {'id_user': user.id}) }}" class="btn1 btn1-edit">Edit</a>
+                    </td>
+                           <td>
+                        <a href="{{ path('app_users_delete', {'id_user': user.id}) }}" class="btn btn-sm btn-danger">Delete</a>
                     </td>
                 </tr>
             {% else %}
@@ -137,12 +144,12 @@
             {% endfor %}
         </tbody>
     </table>
- <div class="pagination">
-        {% set totalPages = (pagination.count / maxPerPage)|round(0, 'ceil') %}
-        {% for page in range(1, totalPages) %}
-            <a href="{{ path('app_hello', {'page': page, 'max': maxPerPage}) }}">{{ page }}</a>
-        {% endfor %}
-    </div>
+<div class="pagination">
+    {% set totalPages = (users|length / maxPerPage)|round(0, 'ceil') %}
+    {% for page in range(1, totalPages) %}
+        <a href="{{ path('app_hello', {'page': page, 'max': maxPerPage}) }}">{{ page }}</a>
+    {% endfor %}
+</div>
   
 
    

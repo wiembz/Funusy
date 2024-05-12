@@ -44,7 +44,7 @@ $(document).ready(function() {
     $('#searchInput').on('keyup', function() {
         var query = $(this).val();
         $.ajax({
-            url: "{{ path('search_compte_by_rib') }}",
+            url: "{{ path('app_search_compte_by_rib') }}",
             method: 'GET',
             data: { query: query },
             success: function(response) {

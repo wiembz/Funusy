@@ -17,11 +17,56 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/compte/back')]
 class CompteBackController extends AbstractController // Extend AbstractController
+{
+    #[Route('/new', name: 'app_compte_back_new', methods: ['GET', 'POST'])]
 
-{  
+    public function new(Request $request, EntityManagerInterface $entityManager, CompteRepository $CompteRepository, ValidatorInterface $validatorInterface): Response
+    {
+        $compte = new Compte();
+        $randomRib = '';
+        for ($i = 0; $i < 20; $i++) {
+            $randomRib .= mt_rand(0, 9); // Append a random digit (0-9)
+        }
+
+        // Set the generated RIB as the default value for the "rib" field
+        $compte->setRib($randomRib);
+        $form = $this->createForm(CompteType::class, $compte);
+        $form->handleRequest($request);
+
+        $currentDateTime = new DateTime();
+
+        $formattedDateTime = $currentDateTime->format('d-m-Y');
+        $date = DateTime::createFromFormat('d-m-Y', $formattedDateTime);
+        dump($date);
+
+        $idUser = $compte->getIdUser();
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $existingCompte = $CompteRepository->findOneBy(['id_user' => $idUser]);
 
 
-   
+            if ($existingCompte) {
+
+                $this->addFlash('error', 'User with ID ' . $idUser . ' already exists !! .');
+                return $this->redirectToRoute('app_compte_show_back_error');
+            }
+
+            $entityManager->persist($compte);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_compte_back_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->render('compte_back/new.html.twig', [
+            'compte' => $compte,
+            'form' => $form->createView(),
+        ]);
+
+
+    }
+
+
     private $entityManager;
 
     public function __construct(EntityManagerInterface $entityManager)
@@ -29,11 +74,11 @@ class CompteBackController extends AbstractController // Extend AbstractControll
         $this->entityManager = $entityManager;
     }
 
-    #[Route("/search/compte/by/rib", name:"app_search_compte_by_rib", methods: ['GET'])]
-    
-   public function searchCompteByRib(Request $request): Response
-   {
-    $query = $request->query->get('query');
+    #[Route("/search/compte/by/rib", name: "app_search_compte_by_rib", methods: ['GET'])]
+
+    public function searchCompteByRib(Request $request): Response
+    {
+        $query = $request->query->get('query');
 
         // Get the repository for the Compte entity
         $repository = $this->entityManager->getRepository(Compte::class);
@@ -55,7 +100,7 @@ class CompteBackController extends AbstractController // Extend AbstractControll
 
     }
 
-   
+
 
     #[Route('/{rib}', name: 'app_compte_back_delete', methods: ['POST'])]
     public function delete(Request $request, Compte $compte, EntityManagerInterface $entityManager): Response
@@ -75,61 +120,13 @@ class CompteBackController extends AbstractController // Extend AbstractControll
     {
         $compte = new Compte();
         $form = $this->createForm(CompteType::class, $compte);
-    
+
         return $this->render('compte_back/show_back.html.twig', [
             'comptes' => $compteRepository->findAll(),
-            'form' => $form->createView(), 
-        ]);
-    }
-
-    #[Route('/new', name: 'app_compte_back_new', methods: ['GET', 'POST'])]
-
-    public function new(Request $request, EntityManagerInterface $entityManager,CompteRepository $CompteRepository,ValidatorInterface $validatorInterface): Response
-    {
-        $compte = new Compte();
-        $randomRib = '';
-        for ($i = 0; $i < 20; $i++) {
-            $randomRib .= mt_rand(0, 9); // Append a random digit (0-9)
-        }
-
-        // Set the generated RIB as the default value for the "rib" field
-        $compte->setRib($randomRib);
-        $form = $this->createForm(CompteType::class, $compte);
-        $form->handleRequest($request);
-
-        $currentDateTime = new DateTime();
-        
-        $formattedDateTime = $currentDateTime->format('d-m-Y');
-        $date = DateTime::createFromFormat('d-m-Y', $formattedDateTime);
-        dump($date);
-
-        $idUser = $compte->getIdUser();
-
-        if ($form->isSubmitted() && $form->isValid()) {
-           
-            $existingCompte = $CompteRepository->findOneBy(['id_user' => $idUser]);
-
-
-            if (!$existingCompte) {
-
-            $this->addFlash('error', 'User with ID '.$idUser.' already exists !! .');
-            return $this->redirectToRoute('app_compte_show_back_error');
-        }
-
-            $entityManager->persist($compte);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_compte_back_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->render('compte_back/new.html.twig', [
-            'compte' => $compte,
             'form' => $form->createView(),
         ]);
-        
-        
     }
-    
+
     #[Route('/{rib}', name: 'app_compte_back', methods: ['GET'])]
     public function show(Compte $compte): Response
     {
@@ -146,23 +143,23 @@ class CompteBackController extends AbstractController // Extend AbstractControll
     ): Response {
         // Get all the comptes from the repository
         $query = $compteRepository->createQueryBuilder('c')->getQuery();
-    
+
         // Paginate the query
         $comptes = $paginator->paginate(
             $query,
             $request->query->getInt('page', 1), // Get the current page from the request
             10 // Number of items per page
         );
-    
+
         $compte = new Compte();
         $form = $this->createForm(CompteType::class, $compte);
-    
+
         return $this->render('compte_back/indexBACK.html.twig', [
             'comptes' => $comptes,
             'form' => $form->createView(),
         ]);
     }
-    
+
 
     #[Route('/{rib}/edit', name: 'app_compte_back_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Compte $compte, EntityManagerInterface $entityManager): Response

@@ -34,98 +34,99 @@ class UserController extends AbstractController
     {
         $currentPage = $request->query->getInt('page', 1);
         $maxPerPage = $request->query->getInt('max', 10);
-    
+
         $query = $entityManager->createQueryBuilder()
             ->select('u')
             ->from('App\Entity\User', 'u')
             ->getQuery();
-    
+
         $paginator = new Paginator($query);
         $paginator->getQuery()
             ->setFirstResult(($currentPage - 1) * $maxPerPage)
             ->setMaxResults($maxPerPage);
-    
+
+        $users = $paginator->getIterator()->getArrayCopy();
         return $this->render('users/index.html.twig', [
-            'pagination' => $paginator,
+            'users' => $users,
             'maxPerPage' => $maxPerPage,
         ]);
     }
-    
- // ResetPassword Method
- #[Route('/reset-password', name: 'reset_password')]
- public function resetPassword(Request $request, SessionInterface $session, MailerInterface $mailer): Response
- {
-     // Create an instance of your email input form
-     $form = $this->createForm(EmailresetType::class);
- 
-     $form->handleRequest($request);
- 
-     if ($form->isSubmitted() && $form->isValid()) {
-         // Get the email from the form submission
-         $email = $form->get('emailUser')->getData();
- 
-         // Generate a random token
-         $randomToken = mt_rand(100000, 999999);
- 
-         // Save the token in the session
-         $session->set('reset_token', $randomToken);
-         $session->set('emailreset', $email);
-         // Send the token to the user's email
-         $emailMessage = (new Email())
-             ->from('hamza.mbarki@esprit.tn')
-             ->to($email)
-             ->subject('Password Reset Token')
-             ->text("Your password reset token is: $randomToken");
- 
-         $mailer->send($emailMessage);
- 
-         // Redirect to a route where users can input the reset token
-         return $this->redirectToRoute('check_reset');
-     }
- 
-     return $this->render('user/reset_password.html.twig', [
-         'form' => $form->createView(),
-     ]);
- }
 
-#[Route('/checkReset', name: 'check_reset')]
-public function checkReset(Request $request, SessionInterface $session): Response
-{
-    $form = $this->createForm(CheckResetType::class);
-    $form->handleRequest($request);
-    $enteredToken='';
-    $storedToken = $session->get('reset_token');
-    if ($form->isSubmitted() && $form->isValid()) {
-        $enteredToken = $form->get('reset_token')->getData();
-        $storedToken = $session->get('reset_token');
+    // ResetPassword Method
+    #[Route('/reset-password', name: 'reset_password')]
+    public function resetPassword(Request $request, SessionInterface $session, MailerInterface $mailer): Response
+    {
+        // Create an instance of your email input form
+        $form = $this->createForm(EmailresetType::class);
 
-        if ($enteredToken == $storedToken) {
-            // Verification successful, clear reset token and redirect to change password page
-            $session->remove('reset_token');
-            return $this->redirectToRoute('change_password');
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Get the email from the form submission
+            $email = $form->get('emailUser')->getData();
+
+            // Generate a random token
+            $randomToken = mt_rand(100000, 999999);
+
+            // Save the token in the session
+            $session->set('reset_token', $randomToken);
+            $session->set('emailreset', $email);
+            // Send the token to the user's email
+            $emailMessage = (new Email())
+                ->from('hamza.mbarki@esprit.tn')
+                ->to($email)
+                ->subject('Password Reset Token')
+                ->text("Your password reset token is: $randomToken");
+
+            $mailer->send($emailMessage);
+
+            // Redirect to a route where users can input the reset token
+            return $this->redirectToRoute('check_reset');
         }
 
-        // Verification failed, add error message to the form
-        $form->addError(new FormError('Invalid reset token.'));
+        return $this->render('user/reset_password.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
-    return $this->render('user/reset/reset_verification_failed.html.twig', [
-        'form' => $form->createView(),
-        'storedToken'=>$storedToken,
-        'enteredToken'=>$enteredToken,
-    ]);
-}
+    #[Route('/checkReset', name: 'check_reset')]
+    public function checkReset(Request $request, SessionInterface $session): Response
+    {
+        $form = $this->createForm(CheckResetType::class);
+        $form->handleRequest($request);
+        $enteredToken = '';
+        $storedToken = $session->get('reset_token');
+        if ($form->isSubmitted() && $form->isValid()) {
+            $enteredToken = $form->get('reset_token')->getData();
+            $storedToken = $session->get('reset_token');
+
+            if ($enteredToken == $storedToken) {
+                // Verification successful, clear reset token and redirect to change password page
+                $session->remove('reset_token');
+                return $this->redirectToRoute('change_password');
+            }
+
+            // Verification failed, add error message to the form
+            $form->addError(new FormError('Invalid reset token.'));
+        }
+
+        return $this->render('user/reset/reset_verification_failed.html.twig', [
+            'form' => $form->createView(),
+            'storedToken' => $storedToken,
+            'enteredToken' => $enteredToken,
+        ]);
+    }
     #[Route('/changePas', name: 'change_password')]
     public function changePassword(Request $request, EntityManagerInterface $entityManager, SessionInterface $session): Response
     {
         $form = $this->createForm(ChangePasswordFormType::class);
         $form->handleRequest($request);
-    
+
         if ($form->isSubmitted() && $form->isValid()) {
             // Get the submitted new password from the form
             $newPassword = $form->get('new_password')->getData();
             $confirmPassword = $form->get('confirm_password')->getData();
-    
+
             // Check if new password and confirm password match
             if ($newPassword !== $confirmPassword) {
                 // Handle error, passwords do not match
@@ -134,30 +135,30 @@ public function checkReset(Request $request, SessionInterface $session): Respons
                     'error' => 'Passwords do not match'
                 ]);
             }
-    
+
             // Fetch the user with emailUser == moha@gmail.com
             $userRepository = $entityManager->getRepository(User::class);
             $email = $session->get('emailreset');
             $user = $userRepository->findOneBy(['emailUser' => $email]);
-            
-       
-    
+
+
+
             // Update the user's password
             if ($user instanceof User) {
                 $user->setMdp(password_hash($newPassword, PASSWORD_DEFAULT));
                 $entityManager->flush();
-    
+
                 // Password updated successfully, redirect or render success message
-                return $this->redirectToRoute('app_home_page');
+                return $this->redirectToRoute('app_user1');
             }
-    
+
             // Handle error, user not found
             return $this->render('user/reset/change_password.html.twig', [
                 'form' => $form->createView(),
                 'error' => 'User not found'
             ]);
         }
-    
+
         // Render the form
         return $this->render('user/reset/change_password.html.twig', [
             'form' => $form->createView(),
@@ -170,87 +171,68 @@ public function checkReset(Request $request, SessionInterface $session): Respons
     public function passwordChangedSuccessfully(Request $request, EntityManagerInterface $entityManager): Response
     {
         // Implement your logic here
-        
+
         return $this->redirectToRoute('signup_success');
     }
     #[Route('/logout', name: 'app_logout')]
     public function logout(SessionInterface $session): Response
     {
         $session->invalidate();
-        return $this->redirectToRoute('home_front');
+        return $this->redirectToRoute('app_home_page');
     }
 
     #[Route('/logins', name: 'app_user1')]
     public function login(Request $request, UserRepository $userRepository, SessionInterface $session): Response
     {
-        $failedAttempts = $session->get('failed_attempts', 0);
 
         $form = $this->createForm(UserLoginFormType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             // Check CAPTCHA if present
-            if ($failedAttempts >= 3) {
-                $captcha = $request->request->get('captcha');
-                // Validate CAPTCHA here
-                if (!$this->validateCaptcha($captcha, $session)) {
-                    // Invalid CAPTCHA, increment failed attempts and display error
-                    $failedAttempts++;
-                    $session->set('failed_attempts', $failedAttempts);
-                    $this->addFlash('error', 'Invalid CAPTCHA.');
-                    return $this->redirectToRoute('app_user1'); // Redirect back to login page
-                }
-              
 
-            }
 
             $userFormData = $form->getData();
             $user = $userRepository->findOneBy(['emailUser' => $userFormData->getEmailUser()]);
 
-            if ($user !== null && password_verify($userFormData->getMdp(), $user->getMdp())) {
+            if ($user !== null && ($user->getRoleUser() === 'CLIENT')) {
                 // Reset failed attempts upon successful login
-                $session->set('failed_attempts', 0);
 
                 // Start session and store user data
                 $session->set('id', $user->getIdUser());
                 $session->set('name', $user->getNomUser());
                 $session->set('role', $user->getRoleUser());
                 $session->set('email', $user->getEmailUser());
-                if ($user->getRoleUser() === 'CLIENT') {
-                    return $this->redirectToRoute('app_home_page');
-                } elseif ($user->getRoleUser() === 'ADMIN') {
-                    return $this->redirectToRoute('app_testback');
-                }
-            } else {
-                $failedAttempts++;
-                $session->set('failed_attempts', $failedAttempts);
 
+                return $this->render('FRONT/indexF.html.twig');
+            } else  {
+                return $this->redirectToRoute('app_testback');
             }
         }
 
-        // Display CAPTCHA field if required
-        $showCaptcha = ($failedAttempts >= 3);
+
 
         return $this->render('user/login/login.html.twig', [
             'form' => $form->createView(),
-            'showCaptcha' => $showCaptcha,
+
         ]);
     }
+
     private function validateCaptcha(?string $captcha, SessionInterface $session): bool
     {
         // Check if captcha is null
         if ($captcha === null) {
             return false;
         }
-    
+
         $captchaSession = $session->get('captcha');
         if ($captcha === $captchaSession) {
             return true;
         }
         return false;
     }
-    
-    
+
+
 
     #[Route('/generate-captcha', name: 'generate_captcha')]
     public function generateCaptcha(SessionInterface $session): Response
@@ -258,15 +240,15 @@ public function checkReset(Request $request, SessionInterface $session): Respons
         // Generate CAPTCHA image
         $captcha = new CaptchaBuilder();
         $captcha->build();
-    
+
         // Set CAPTCHA text in session
         $session->set('captcha', $captcha->getPhrase());
-    
+
         // Generate response with CAPTCHA image
         $response = new Response($captcha->get(), 200, [
             'Content-Type' => 'image/jpeg',
         ]);
-    
+
         return $response;
     }
 
@@ -305,12 +287,12 @@ public function checkReset(Request $request, SessionInterface $session): Respons
 
         if ($form->isSubmitted() && $form->isValid()) {
             $password = $user->getMdp();   /////  hna jbed password men 3and el user 
-            
+
 
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT); ///// hna hasha el password 
             $user->setMdp($hashedPassword); ///// hna raja3 el password lel user ama 3amelou el hash (cripteh )
 
-            
+
             $_SESSION['password'] = $hashedPassword;///// hna type fi lansa session   besm password 
             return $this->redirectToRoute('signup_step3');
         }
@@ -330,11 +312,11 @@ public function checkReset(Request $request, SessionInterface $session): Respons
         if ($form->isSubmitted() && $form->isValid()) {
             $email = $_SESSION['email'];
             $password = $_SESSION['password'];
-            
+
             // Set email and password obtained from session
             $user->setEmailUser($email);
             $user->setMdp($password);
-            
+
             // Persist user to the database
             $entityManager->persist($user);
             $entityManager->flush();
@@ -344,7 +326,7 @@ public function checkReset(Request $request, SessionInterface $session): Respons
             unset($_SESSION['password']);
 
             // Redirect to a success page or wherever you want
-            return $this->redirectToRoute('signup_success');
+            return $this->redirectToRoute('app_home_page2');
         }
 
         return $this->render('user/signup/step3.html.twig', [
@@ -357,5 +339,5 @@ public function checkReset(Request $request, SessionInterface $session): Respons
     {
         return $this->render('user/signup/success.html.twig');
     }
-   
+
 }

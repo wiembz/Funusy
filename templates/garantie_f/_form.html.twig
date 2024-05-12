@@ -6,8 +6,14 @@
         <h3 class="fw-bold">Create a new Guarantee</h3>
     </div>
     <div class="card-body">
-        <form>
-            <div class="mb-3 d-flex flex-column">
+        {% if form_errors(form) %}
+            <div class="alert alert-danger" role="alert">
+                {{ form_errors(form) }}
+            </div>
+        {% endif %}
+
+        <div class="row">
+            <div class="mb-3 col-md-6">
                 <label class="form-label" for="basic-icon-default-idCredit">Id Credit</label>
                 <div class="input-group input-group-merge">
                     <input
@@ -22,15 +28,17 @@
                 </div>
                 <div class="text-danger mt-2">{{ form_errors(form.idCredit) }}</div>
             </div>
-            <div class="mb-3">
+            <div class="mb-3 col-md-6">
                 <label class="form-label" for="basic-icon-default-natureGarantie">Nature de la garantie</label>
                 <div class="input-group input-group-merge">
                     {{ form_widget(form.natureGarantie, {'attr': {'class': 'form-select'}}) }}
                 </div>
                 <div class="text-danger mt-2">{{ form_errors(form.natureGarantie) }}</div>
             </div>
+        </div>
 
-            <div class="mb-3">
+        <div class="row">
+            <div class="mb-3 col-md-6">
                 <label class="form-label" for="basic-icon-default-valeurGarantie">Guaranteed value</label>
                 <div class="input-group input-group-merge">
                     <input
@@ -45,17 +53,19 @@
                 </div>
                 <div class="text-danger mt-2">{{ form_errors(form.valeurGarantie) }}</div>
             </div>
-            <div class="mb-3">
+            <div class="mb-3 col-md-6">
                 <label class="form-label" for="basic-icon-default-preuve">Preuve (PDF)</label>
                 <div class="input-group input-group-merge">
                     {{ form_widget(form.preuve, {'attr': {'class': 'form-control', 'accept': 'application/pdf'}}) }}
                 </div>
                 <div class="text-danger mt-2">{{ form_errors(form.preuve) }}</div>
             </div>
+        </div>
+    </div>
 
-            <button type="submit" class="btn btn-primary">{{ button_label|default('Send') }}</button>
-            <a href="{{ path('app_garantie_f_index') }}" class="btn btn-secondary">Back to list</a>
-        </form>
+    <div class="card-footer">
+        <button type="submit" class="btn btn-primary">{{ button_label|default('Send') }}</button>
+        <a href="{{ path('app_garantie_f_index') }}" class="btn btn-secondary">Back to list</a>
     </div>
 </div>
 

@@ -22,7 +22,7 @@ class HomePageController extends AbstractController
     {
         $this->entityManager = $entityManager;
     }
-    #[Route('/home/page', name: 'app_home_page')]
+    #[Route('/', name: 'app_home_page')]
     public function index(): Response
     {
         return $this->render('FRONT/index.html.twig', [

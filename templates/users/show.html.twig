@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'BACK/base.html.twig' %}
 
 {% block title %}User{% endblock %}
 
@@ -60,7 +60,7 @@
 
     <a href="{{ path('app_users_index') }}">back to list</a>
 
-    <a href="{{ path('app_users_edit', {'id_user': user.id_user}) }}">edit</a>
+<a href="{{ path('app_users_edit', {'id_user': user.idUser}) }}">edit</a>
 
     {{ include('users/_delete_form.html.twig') }}
 {% endblock %}
