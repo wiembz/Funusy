@@ -15,7 +15,8 @@ use App\Repository\UserRepository;
 use DateTime;
 use Dompdf\Dompdf;
 use Dompdf\Options;
-
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 #[Route('/compte')]
 class CompteController extends AbstractController
@@ -114,7 +115,7 @@ public function getUserDetails($userId, UserRepository $userRepository): JsonRes
 
         }
 
-        return $this->render('compte/new.html.twig', [
+        return $this->render('compte/show.html.twig', [
             'compte' => $compte,
             'form' => $form->createView(),
         ]);
@@ -125,9 +126,19 @@ public function getUserDetails($userId, UserRepository $userRepository): JsonRes
     #[Route('/{rib}', name: 'app_compte_show', methods: ['GET'])]
     public function show(Compte $compte): Response
     {
-        return $this->render('compte/show.html.twig', [
-            'compte' => $compte,
-        ]);
+        $user = $this->getUser();
+    
+    // Check if the user is logged in
+    if (!$user) {
+        return $this->redirectToRoute('app_compte_index');
+    }
+    
+    // Check if the logged-in user is the owner of the account
+   
+    
+    return $this->render('compte/show.html.twig', [
+        'compte' => $compte,
+    ]);
     }
 
     #[Route('/', name: 'app_compte_index', methods: ['GET', 'POST'])]

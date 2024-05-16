@@ -20,16 +20,7 @@ use DateTime;
 class CarteBancaireBackController extends AbstractController
 {
 
-    #[Route('/{numCarte}', name: 'app_carte_bancaire_back_delete', methods: ['POST','GET'])]
-    public function deleteB(Request $request, CarteBancaire $carteBancaire, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$carteBancaire->getNumCarte(), $request->request->get('_token'))) {
-            $entityManager->remove($carteBancaire);
-            $entityManager->flush();
-        }
-
-        return $this->redirectToRoute('app_carte_bancaire_back_index', [], Response::HTTP_SEE_OTHER);
-    }
+   
 
 
 
@@ -91,7 +82,16 @@ class CarteBancaireBackController extends AbstractController
     }
 
    
-   
+    #[Route('/{numCarte}', name: 'app_carte_bancaire_back_delete', methods: ['POST','GET'])]
+    public function deleteB(Request $request, CarteBancaire $carteBancaire, EntityManagerInterface $entityManager): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$carteBancaire->getNumCarte(), $request->request->get('_token'))) {
+            $entityManager->remove($carteBancaire);
+            $entityManager->flush();
+        }
+
+        return $this->redirectToRoute('app_carte_bancaire_back_index', [], Response::HTTP_SEE_OTHER);
+    }
    
    
 }

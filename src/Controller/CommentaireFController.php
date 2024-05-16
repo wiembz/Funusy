@@ -45,7 +45,7 @@ class CommentaireFController extends AbstractController
 
             // Check for bad words
             $commentText = $commentaire->getContenue();
-            $badWords = BadWordsLoader::loadBadWords("C:\\Users\\ASUS\\Downloads\\validationmetier\\List.txt");
+            $badWords = BadWordsLoader::loadBadWords("C:\\Users\\nouuc\\Downloads\\List.txt");
             foreach ($badWords as $badWord) {
                 if (stripos($commentText, $badWord) !== false) {
                     $form->get('contenue')->addError(new FormError('Your comment contains inappropriate words.'));

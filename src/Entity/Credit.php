@@ -47,6 +47,7 @@ class Credit
     #[ORM\JoinColumn(name: "id_user", referencedColumnName: "id_user")]
     #[Assert\NotBlank(message: 'L\'utilisateur est obligatoire')]
     private ?User $user;
+    
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Garantie", mappedBy="credit", cascade={"persist", "remove"})

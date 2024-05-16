@@ -40,14 +40,8 @@
                                 <td>{{ carte_bancaire.cvv2}}</td>
 
                                 
-                                <td>
-                                    <a href="{{ path('app_carte_bancaire_show', {'numCarte': carte_bancaire.numCarte}) }}" class="btn btn-primary">show</a>
-                                   
-                                </td>
-                                <td>
-                                    <a href="{{ path('app_carte_bancaire_back_delete', {'numCarte': carte_bancaire.numCarte}) }}" class="btn bg-danger">Delete</a>
-                                   
-                                </td>
+                               
+                               
                             </tr>
                         {% else %}
                             <tr>
